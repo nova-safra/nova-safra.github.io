@@ -54,7 +54,8 @@ a{color:inherit}
 
 /* chips */
 .status{display:inline-flex;align-items:center;gap:10px;padding:8px 14px 8px 10px;border:1px solid var(--line-2);border-radius:999px;background:rgba(255,255,255,.03);font-family:var(--f-mono);font-size:12px;color:var(--soft)}
-.dot{width:8px;height:8px;border-radius:50%;background:var(--fg);box-shadow:0 0 0 4px rgba(255,255,255,.12);animation:pulse 2s ease-in-out infinite}
+.dot{width:8px;height:8px;border-radius:50%;background:#22E07A;box-shadow:0 0 6px 1px rgba(34,224,122,.9),0 0 0 4px rgba(34,224,122,.14);animation:livedot 2s ease-in-out infinite}
+@keyframes livedot{0%,100%{box-shadow:0 0 6px 1px rgba(34,224,122,.9),0 0 0 3px rgba(34,224,122,.18)}50%{box-shadow:0 0 12px 3px rgba(34,224,122,.75),0 0 0 6px rgba(34,224,122,.06)}}
 @keyframes pulse{50%{box-shadow:0 0 0 7px rgba(255,255,255,0)}}
 
 /* TOPO */
