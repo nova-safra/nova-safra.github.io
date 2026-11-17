@@ -382,10 +382,11 @@ const DB = {
   },
   async calls(){
     if (DEMO) return [
-      { n:1, title:"Abertura da Safra: como a turma vai funcionar", presenter:"Nova Safra", call_date:"2026-11-20", youtube_id:"" },
-      { n:2, title:"Call da Safra #2", presenter:"Nova Safra", call_date:"2026-11-27", youtube_id:"" },
-      { n:3, title:"Call da Safra #3", presenter:"Nova Safra", call_date:"2026-12-04", youtube_id:"" },
-      { n:4, title:"Fechamento da Safra: planejando 2027", presenter:"Nova Safra", call_date:"2026-12-11", youtube_id:"" }
+      { n:1, title:"Abertura da Safra: como a turma vai funcionar", presenter:"Nova Safra", call_date:"2026-11-27", youtube_id:"" },
+      { n:2, title:"Call da Safra #2", presenter:"Nova Safra", call_date:"2026-12-04", youtube_id:"" },
+      { n:3, title:"Call da Safra #3", presenter:"Nova Safra", call_date:"2026-12-11", youtube_id:"" },
+      { n:4, title:"Call da Safra #4", presenter:"Nova Safra", call_date:"2026-12-18", youtube_id:"" },
+      { n:5, title:"Fechamento da Safra: planejando 2027", presenter:"Nova Safra", call_date:"2026-12-30", youtube_id:"" }
     ];
     const { data, error } = await sb.from("calls").select("*").order("call_date");
     if (error) throw error;
@@ -553,10 +554,11 @@ function pageFechamento(){
 
 function callCard(c, wide){
   if (!c) return `<p class="sub">As calls aparecem aqui.</p>`;
-  const has = !!c.youtube_id;
-  const bg = has ? `style="background-image:url(https://i.ytimg.com/vi/${encodeURIComponent(c.youtube_id)}/hqdefault.jpg)"` : "";
+  const has = !!c.youtube_id, cover = c.n>=1 && c.n<=5 ? `capas/call-${c.n}.jpg` : "";
+  const img = cover || (has ? `https://i.ytimg.com/vi/${encodeURIComponent(c.youtube_id)}/hqdefault.jpg` : "");
+  const bg = img ? `style="background-image:url(${img})"` : "";
   return `<button class="call" ${has?`data-call="${esc(c.youtube_id)}" data-title="${esc(c.title)}"`:""} style="${wide?"width:100%":""}">
-    <div class="thumb ${has?"":"empty"}" ${bg}><span class="num">${String(c.n).padStart(2,"0")}</span>${has?`<span class="play">${I.play}</span>`:`${logo(34)}<span class="pill soon">${c.call_date>=TODAY?"ao vivo "+br(c.call_date):"gravação em breve"}</span>`}</div>
+    <div class="thumb ${img?"":"empty"}" ${bg}>${cover?"":`<span class="num">${String(c.n).padStart(2,"0")}</span>`}${has?`<span class="play">${I.play}</span>`:`${cover?"":logo(34)}${cover&&c.call_date>=TODAY?"":`<span class="pill soon">${c.call_date>=TODAY?"ao vivo "+br(c.call_date):"gravação em breve"}</span>`}`}</div>
     <div class="info"><div class="ti">${esc(c.title)}</div><div class="mt"><span>${esc(c.presenter||"Nova Safra")}</span><span>${br(c.call_date)}</span></div></div></button>`;
 }
 function pactForm(first){
@@ -606,7 +608,7 @@ function pageBeneficios(){
       <a class="btn" ${C.SKILL_URL?`href="${esc(C.SKILL_URL)}" target="_blank" rel="noopener"`:`aria-disabled="true"`}>${C.SKILL_URL?"Baixar a skill":"Liberada em breve"}</a></div>
     <div class="card"><span class="pill tag">Comunidade</span><h3>Grupo da turma</h3><p>Onde a turma conversa, troca network e avisa das calls ao vivo.</p>
       <a class="btn ghost" href="${esc(C.WHATSAPP)}" target="_blank" rel="noopener">Entrar no grupo</a></div>
-    <div class="card"><span class="pill tag">Toda semana</span><h3>Call da Safra ao vivo</h3><p>4 calls ao vivo durante os 45 dias, com gravação aqui na área.</p>
+    <div class="card"><span class="pill tag">Toda semana</span><h3>Call da Safra ao vivo</h3><p>5 calls ao vivo durante os 45 dias, com gravação aqui na área.</p>
       <a class="btn ghost" href="#/calls">Ver as calls</a></div>
   </section>`);
 }
