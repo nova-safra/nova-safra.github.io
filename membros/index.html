@@ -39,7 +39,7 @@ a{color:inherit}
 .me .lv{font-size:12px;color:var(--g)}
 .me button{margin-left:auto;color:var(--mut);padding:6px;border-radius:8px}
 .me button:hover{color:var(--fg);background:rgba(255,255,255,.06)}
-main{padding:40px 48px 80px;max-width:1180px;width:100%}
+main{padding:40px 48px 80px;max-width:1180px;width:100%;min-width:0}
 .demo{display:flex;gap:10px;align-items:center;border:1px dashed rgba(34,224,122,.4);background:rgba(34,224,122,.06);color:#bdf5d4;border-radius:12px;padding:10px 14px;font-size:13.5px;margin-bottom:26px}
 
 /* ---------- type ---------- */
@@ -113,13 +113,6 @@ h2 .ic{color:var(--g);width:20px;height:20px}
 .mini5{display:flex;gap:3px}
 .mini5 i{width:7px;height:16px;border-radius:3px;background:rgba(255,255,255,.1)}
 .mini5 i.on{background:var(--g);box-shadow:0 0 6px rgba(34,224,122,.6)}
-.podium{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:18px}
-.pod{text-align:center;padding:22px 14px}
-.pod .av{width:56px;height:56px;font-size:18px;margin:0 auto 10px}
-.pod .medal{font-family:var(--f-mono);font-size:12px;display:inline-block;padding:3px 10px;border-radius:99px;margin-bottom:12px;background:rgba(255,255,255,.08)}
-.pod.p1 .medal{background:var(--g);color:#04140A}
-.pod b{display:block}
-.pod span{font-size:13px;color:var(--mut)}
 
 /* calls */
 .calls{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:16px}
@@ -171,6 +164,47 @@ h2 .ic{color:var(--g);width:20px;height:20px}
 .pacto .note{text-align:center;font-size:13px;color:var(--mut2);margin-top:10px}
 .hb .d.mine{color:#d9d9d4;font-weight:500;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
 @media (max-width:760px){.pacto-full{padding:26px 16px 50px}.pk{grid-template-columns:30px 1fr;gap:4px 10px;padding:16px}.pk .em{font-size:22px}}
+/* emblemas + ranking */
+.avw{position:relative;display:inline-block;flex:none;line-height:0}
+.avw .avb{position:absolute;right:-7px;bottom:-7px;line-height:0}
+.lv-strip{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:10px}
+.lvc{position:relative;border:1px solid var(--line);background:var(--card);border-radius:16px;padding:18px 8px 14px;text-align:center}
+.lvc .emb{display:block;margin:0 auto 10px}
+.lvc b{display:block;font-size:14px;letter-spacing:-.01em}
+.lvc small{display:block;font-size:12px;color:var(--mut);margin-top:2px}
+.lvc .cnt{display:inline-block;margin-top:8px;font-size:11.5px;color:var(--mut);background:rgba(255,255,255,.05);border-radius:99px;padding:2px 9px}
+.lvc.cur{border-color:var(--tc);background:linear-gradient(180deg,color-mix(in srgb,var(--tc) 16%,transparent),transparent 80%)}
+.lvc.cur b{color:var(--tc)}
+.lvc .you{position:absolute;top:8px;right:8px;font:600 9.5px var(--f-mono);letter-spacing:.12em;text-transform:uppercase;color:#04140A;background:var(--tc);border-radius:99px;padding:2px 7px}
+.lvc.locked .emb{opacity:.32;filter:grayscale(.9)}
+.lvc.locked b{color:var(--mut)}
+.podium{display:grid;grid-template-columns:1fr 1.18fr 1fr;align-items:end;gap:14px;margin:26px 0 18px}
+.pod{position:relative;text-align:center;padding:26px 12px 20px;border-radius:20px}
+.pod .avw .av{width:62px;height:62px;font-size:20px}
+.pod.p1{padding-top:36px;padding-bottom:26px;border-color:rgba(34,224,122,.55);background:radial-gradient(ellipse at 50% 0%,rgba(34,224,122,.2),transparent 70%),var(--card);box-shadow:0 0 50px -14px rgba(34,224,122,.45)}
+.pod.p1 .avw .av{width:78px;height:78px;font-size:24px;border:2px solid rgba(34,224,122,.6)}
+.pod .medal{position:absolute;top:-13px;left:50%;transform:translateX(-50%);font:700 13px var(--f-sans);padding:4px 12px;border-radius:99px;background:#2a2d31;color:#d8d8d4;border:1px solid var(--line2)}
+.pod.p1 .medal{background:var(--g);color:#04140A;border-color:var(--g);box-shadow:0 0 14px rgba(34,224,122,.6)}
+.pod.p2 .medal{background:#D7DBE0;color:#14161a;border-color:#D7DBE0}
+.pod.p3 .medal{background:#C98A5A;color:#1a0f07;border-color:#C98A5A}
+.pod .pn{display:block;font-weight:700;font-size:16px;margin-top:14px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.pod .tt{display:block;color:var(--tc);font-size:13px;font-weight:600;margin-top:2px}
+.pod .pts{display:block;font-size:26px;font-weight:800;letter-spacing:-.03em;margin-top:10px;line-height:1}
+.pod .pts small{font-size:13px;color:var(--mut);font-weight:500}
+.pod .meta{display:block;font-size:12.5px;color:var(--mut);margin-top:6px}
+.pod.mine{outline:1.5px solid rgba(34,224,122,.6);outline-offset:3px}
+.row .tt{color:var(--tc);font-weight:600}
+.row .avw .av{width:40px;height:40px}
+.rank-h{display:flex;justify-content:space-between;align-items:baseline;margin:26px 0 10px}
+@media (max-width:760px){
+  .lv-strip{grid-template-columns:repeat(5,104px);overflow-x:auto;margin:0 -16px;padding:4px 16px 8px;scrollbar-width:none}
+  .lv-strip::-webkit-scrollbar{display:none}
+  .podium{gap:8px;grid-template-columns:1fr 1.12fr 1fr}
+  .pod{padding:22px 4px 14px}.pod.p1{padding-top:28px}
+  .pod .avw .av{width:48px;height:48px;font-size:16px}.pod.p1 .avw .av{width:58px;height:58px;font-size:19px}
+  .pod .pn{font-size:14px}.pod .tt{font-size:11.5px}.pod .pts{font-size:21px}.pod .meta{font-size:11px}
+  .row .avw .av{width:34px;height:34px}
+}
 /* título */
 .titulo{margin-top:18px;display:flex;align-items:center;gap:18px}
 .titulo .tic{width:52px;height:52px;border-radius:14px;display:grid;place-items:center;flex:none;background:var(--gbg);border:1px solid rgba(34,224,122,.4);color:var(--g);font:700 15px var(--f-mono)}
@@ -236,7 +270,7 @@ h2 .ic{color:var(--g);width:20px;height:20px}
   .row{grid-template-columns:30px 34px 1fr auto;gap:10px;padding:10px 12px}
   .row .mini5{display:none}
   .row .av{width:34px;height:34px}
-  .podium{gap:8px}.pod{padding:16px 6px}.pod .av{width:44px;height:44px}
+
   .mtop{display:flex!important}
   .tabbar{display:grid;grid-template-columns:repeat(5,1fr);position:fixed;left:0;right:0;bottom:0;z-index:40;background:rgba(8,9,10,.92);backdrop-filter:blur(12px);border-top:1px solid var(--line);padding:8px 4px calc(8px + env(safe-area-inset-bottom))}
   .tabbar a{display:flex;flex-direction:column;align-items:center;gap:3px;font-size:10.5px;color:var(--mut);text-decoration:none;padding:4px 0}
@@ -413,10 +447,36 @@ const TITLES = [
 ];
 const titleIdx = pts => { let i=0; TITLES.forEach((t,k)=>{ if (pts>=t.min) i=k; }); return i; };
 const titleOf = pts => TITLES[titleIdx(pts)].n;
+const EMB = [
+  {c:"#AEB6B0", px:[[3,1],[2,2],[3,2],[4,2],[2,3],[3,3],[4,3],[2,4],[3,4],[4,4],[3,5]], soil:true},
+  {c:"#D9965A", px:[[0,1],[1,1],[1,2],[2,2],[6,1],[5,1],[5,2],[4,2],[3,3],[3,4],[3,5]], soil:true},
+  {c:"#22E07A", px:[[0,1],[1,1],[5,1],[6,1],[0,2],[1,2],[2,2],[4,2],[5,2],[6,2],[1,3],[2,3],[3,3],[4,3],[5,3],[3,4],[3,5],[1,6],[2,6],[3,6],[4,6],[5,6]]},
+  {c:"#F0A23B", px:[[1,0],[5,0],[3,0],[2,1],[3,1],[4,1],[2,2],[3,2],[4,2],[2,3],[3,3],[4,3],[3,4],[3,5],[3,6],[4,5],[5,4]]},
+  {c:"#FFE27A", px:[[1,0],[3,0],[5,0],[1,1],[2,1],[3,1],[4,1],[5,1],[1,3],[3,3],[5,3],[2,4],[3,4],[4,4],[3,5],[2,6],[3,6],[4,6]], master:true}
+];
+function emblem(i, s=40){
+  const e = EMB[i], hex = "M32 3.5 L56.7 17.75 L56.7 46.25 L32 60.5 L7.3 46.25 L7.3 17.75 Z";
+  const cell = (x,y,o=1,c=e.c) => `<rect x="${13+x*5.5}" y="${13+y*5.5}" width="4.6" height="4.6" rx="1.3" fill="${c}" opacity="${o}"/>`;
+  const soil = e.soil ? [0,1,2,3,4,5,6].map(x=>cell(x,6,.32)).join("") : "";
+  const g = `eg${i}`;
+  return `<svg class="emb" width="${s}" height="${s}" viewBox="0 0 64 64" aria-hidden="true" style="overflow:visible">
+    <defs><linearGradient id="${g}" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${e.c}" stop-opacity="${e.master?.42:.28}"/><stop offset="1" stop-color="${e.c}" stop-opacity=".05"/></linearGradient>
+    ${e.master?`<linearGradient id="${g}s" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#FFF4C2"/><stop offset=".5" stop-color="#FFD24D"/><stop offset="1" stop-color="#22E07A"/></linearGradient>`:""}</defs>
+    ${e.master?`<path d="${hex}" fill="none" stroke="#FFD24D" stroke-opacity=".28" stroke-width="9" stroke-linejoin="round"/>`:""}
+    <path d="${hex}" fill="#0B0C0D"/>
+    <path d="${hex}" fill="url(#${g})" stroke="${e.master?`url(#${g}s)`:e.c}" stroke-width="${e.master?3:2.2}" stroke-linejoin="round" stroke-opacity="${i===0?.6:1}"/>
+    <g style="filter:drop-shadow(0 0 ${i>=2?2.6:1.2}px ${e.c})">${e.px.map(([x,y])=>cell(x,y)).join("")}${soil}</g>
+    ${e.master?`<g fill="#FFF4C2"><circle cx="58" cy="8" r="1.6"/><circle cx="6" cy="10" r="1.1"/><circle cx="60" cy="56" r="1.1"/></g>`:""}
+  </svg>`;
+}
+const tcolor = pts => EMB[titleIdx(pts)].c;
+const nm = n => String(n||"").replace(/(^|\s)(\p{Ll})/gu, (m,a,b)=>a+b.toUpperCase());
+const avatarE = (n, pts, s=18) => `<span class="avw">${avatar(n)}<span class="avb">${emblem(titleIdx(pts), s)}</span></span>`;
+const streakTxt = n => n>0 ? `🔥 ${seguidos(n)}` : "sem sequência ainda";
 function showLevelUp(i){
   document.querySelector(".lvup")?.remove();
   const t = TITLES[i], m = document.createElement("div"); m.className="lvup";
-  m.innerHTML = `<div class="box">${logo(48)}<div class="mono" style="margin-top:16px">Novo título</div><h3>${t.n}</h3><p>${t.f}</p><button class="btn" data-close-lv>Seguir plantando</button></div>`;
+  m.innerHTML = `<div class="box">${emblem(i,104)}<div class="mono" style="margin-top:16px;color:${EMB[i].c}">Novo título</div><h3>${t.n}</h3><p>${t.f}</p><button class="btn" data-close-lv>Seguir plantando</button></div>`;
   document.body.appendChild(m);
 }
 
@@ -446,7 +506,7 @@ function shell(inner){
     <div class="nav-g mono">Comunidade</div>
     <nav class="nav">${NAV.slice(3).map(n=>`<a href="#/${n.r}" class="${r===n.r?"on":""}">${n.i}${n.t}</a>`).join("")}
       <a href="${esc(C.WHATSAPP)}" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20l1.3-3.8A8 8 0 1 1 8 19z"/></svg>Grupo da turma</a></nav>
-    <div class="me">${avatar(S.me.name)}<div style="min-width:0"><div class="nm">${esc(S.me.name)}</div><div class="lv">${lv}</div></div><button title="Sair" data-act="logout">${I.out}</button></div>
+    <div class="me">${avatarE(S.me.name, sc.total, 16)}<div style="min-width:0"><div class="nm">${esc(S.me.name)}</div><div class="lv" style="color:${tcolor(sc.total)}">${lv}</div></div><button title="Sair" data-act="logout">${I.out}</button></div>
   </aside>
   <main>
     <div class="mtop">${logo(26)}<button class="pill" data-act="logout">${I.out} Sair</button></div>
@@ -475,11 +535,11 @@ function titleCard(pts){
   const pct = nx ? ((pts-t.min)/(nx.min-t.min)*100) : 100;
   const falta = nx ? nx.min-pts : 0;
   return `<div class="card titulo-card" style="margin-top:22px">
-    <div class="titulo" style="margin-top:0"><span class="tic">${String(i+1).padStart(2,"0")}</span>
-      <div class="tb"><div class="mono" style="font-size:10.5px">Seu título</div><div class="tn">${t.n}</div>
+    <div class="titulo" style="margin-top:0">${emblem(i,60)}
+      <div class="tb"><div class="mono" style="font-size:10.5px">Seu título</div><div class="tn" style="color:${EMB[i].c}">${t.n}</div>
       <div class="tx">${nx ? `Faltam <b style="color:var(--fg)">${falta} ${falta===1?"ponto":"pontos"}</b> para <b style="color:var(--g)">${nx.n}</b>` : "Título máximo da Safra. Você chegou."}</div>
       <div class="bar"><i style="width:${Math.min(100,pct).toFixed(1)}%"></i></div></div></div>
-    <div class="trail">${TITLES.map((x,k)=>`<span class="${k<i?"done":k===i?"cur":""}">${x.n}</span>`).join("")}</div>
+    <div class="trail">${TITLES.map((x,k)=>`<span class="${k<i?"done":k===i?"cur":""}" style="display:inline-flex;align-items:center;gap:6px;${k===i?`background:${EMB[k].c};border-color:${EMB[k].c}`:""}">${emblem(k,16)}${x.n}</span>`).join("")}</div>
   </div>`;
 }
 function pageInicio(){
@@ -589,15 +649,23 @@ function pageCalls(){
 }
 
 function rowHTML(r,i){
-  const mine = r.id===S.me.id || r.id==="me";
-  return `<div class="row ${mine?"me-row":""}"><span class="pos ${i<3?"top":""}">#${i+1}</span>${avatar(r.name)}<span class="n">${esc(r.name)}${mine?" (você)":""}<small><span style="color:var(--g)">${titleOf(r.total)}</span> · ${seguidos(r.streak)}</small></span><span class="mini5">${[0,1,2,3,4].map(k=>`<i class="${k<r.today?"on":""}"></i>`).join("")}</span><span class="s"><b>${r.total}</b> pts</span></div>`;
+  const mine = r.id===S.me.id || r.id==="me", ti = titleIdx(r.total);
+  return `<div class="row ${mine?"me-row":""}" style="--tc:${EMB[ti].c}"><span class="pos ${i<3?"top":""}">#${i+1}</span>${avatarE(r.name, r.total, 18)}<span class="n">${esc(nm(r.name))}${mine?" (você)":""}<small><span class="tt">${TITLES[ti].n}</span> · ${streakTxt(r.streak)}</small></span><span class="mini5" title="Pacto de hoje: ${r.today}/5">${[0,1,2,3,4].map(k=>`<i class="${k<r.today?"on":""}"></i>`).join("")}</span><span class="s"><b>${r.total}</b> pts</span></div>`;
 }
 function pageSemeadores(){
-  const top = S.rank.slice(0,3); const order=[1,0,2];
-  return shell(`<h1>Semeadores</h1><p class="sub">Cada hábito marcado vale 1 ponto. Os pontos sobem seu título: ${TITLES.map(t=>t.n+" ("+t.min+")").join(" → ")}.</p>
+  const meIdx = titleIdx(score(S.checks).total);
+  const counts = TITLES.map((_,k)=>S.rank.filter(r=>titleIdx(r.total)===k).length);
+  const top = S.rank.slice(0,3), order=[1,0,2], podium = top.length>=3;
+  const pod = i => { const r=top[i], ti=titleIdx(r.total), mine=r.id===S.me.id||r.id==="me";
+    return `<div class="card pod p${i+1} ${mine?"mine":""}" style="--tc:${EMB[ti].c}"><span class="medal">${i+1}º</span>${avatarE(r.name, r.total, i===0?30:24)}
+      <span class="pn">${esc(nm(first(r.name)))}${mine?" (você)":""}</span><span class="tt">${TITLES[ti].n}</span>
+      <span class="pts">${r.total} <small>pts</small></span><span class="meta">${r.streak>0?`🔥 ${seguidos(r.streak)}`:"começando"}</span></div>`; };
+  const rest = podium ? S.rank.slice(3) : S.rank;
+  return shell(`<h1>Semeadores</h1><p class="sub">Cada hábito do seu pacto cumprido vale 1 ponto. Junte pontos e suba de nível até Mestre da Safra.</p>
   <section class="sec">
-    ${top.length>=3?`<div class="podium">${order.map(i=>{const r=top[i];return `<div class="card pod p${i+1}"><span class="medal">#${i+1}</span>${avatar(r.name)}<b>${esc(first(r.name))}</b><span style="display:block;color:var(--g);font-size:12.5px">${titleOf(r.total)}</span><span>${r.total} pts · ${r.streak}d</span></div>`}).join("")}</div>`:""}
-    <div class="rank">${S.rank.map((r,i)=>rowHTML(r,i)).join("")}</div>
+    <div class="lv-strip">${TITLES.map((t,k)=>`<div class="lvc ${k===meIdx?"cur":""} ${k>meIdx?"locked":""}" style="--tc:${EMB[k].c}">${k===meIdx?`<span class="you">você</span>`:""}${emblem(k,52)}<b>${t.n}</b><small>${t.min===0?"início":t.min+"+ pts"}</small><span class="cnt">${counts[k]} ${counts[k]===1?"semeador":"semeadores"}</span></div>`).join("")}</div>
+    ${podium?`<div class="podium">${order.map(pod).join("")}</div>`:""}
+    ${rest.length?`<div class="rank-h"><h2 style="font-size:17px">${podium?"Toda a turma":"Ranking"}</h2><span class="sub" style="margin:0">${S.rank.length} semeadores</span></div><div class="rank">${rest.map((r,k)=>rowHTML(r,k+(podium?3:0))).join("")}</div>`:""}
   </section>`);
 }
 
