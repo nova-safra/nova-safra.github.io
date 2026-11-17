@@ -1,0 +1,583 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Nova Safra · Área do Semeador</title>
+<meta name="robots" content="noindex">
+<meta name="theme-color" content="#08090A">
+<link rel="icon" href="../favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant:ital,wght@0,500;0,600;1,500&family=Geist:wght@400;500;600;700;800&family=Geist+Mono:wght@400;500&display=swap">
+<style>
+:root{--bg:#08090A;--bg2:#0E0F11;--card:rgba(255,255,255,.035);--line:rgba(255,255,255,.09);--line2:rgba(255,255,255,.16);--fg:#F5F5F3;--mut:#9A9A95;--mut2:#6B6B67;--g:#22E07A;--g2:#16C566;--gbg:rgba(34,224,122,.12);--f-sans:"Geist",system-ui,sans-serif;--f-mono:"Geist Mono",ui-monospace,monospace;--f-serif:"Cormorant",Georgia,serif;--side:248px}
+*{box-sizing:border-box;margin:0}
+html,body{background:var(--bg);color:var(--fg);font-family:var(--f-sans);font-size:16px;line-height:1.5;-webkit-font-smoothing:antialiased}
+body{min-height:100vh;background:radial-gradient(ellipse 60% 40% at 70% -5%,rgba(34,224,122,.07),transparent 70%),linear-gradient(rgba(255,255,255,.025) 1px,transparent 1px) 0 0/56px 56px,linear-gradient(90deg,rgba(255,255,255,.025) 1px,transparent 1px) 0 0/56px 56px,var(--bg);background-attachment:fixed}
+button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
+a{color:inherit}
+.mono{font-family:var(--f-mono);letter-spacing:.14em;text-transform:uppercase;font-size:11.5px;color:var(--mut)}
+.serif{font-family:var(--f-serif);font-style:italic;font-weight:500}
+.logo{display:block;color:var(--g);filter:drop-shadow(0 0 10px rgba(34,224,122,.45))}
+.hidden{display:none!important}
+
+/* ---------- layout ---------- */
+.app{display:grid;grid-template-columns:var(--side) 1fr;min-height:100vh}
+.side{position:sticky;top:0;height:100vh;border-right:1px solid var(--line);background:rgba(8,9,10,.82);backdrop-filter:blur(10px);display:flex;flex-direction:column;padding:22px 14px}
+.brand{display:flex;align-items:center;gap:12px;padding:6px 10px 26px}
+.brand b{font-weight:800;letter-spacing:-.03em;font-size:19px}
+.brand .serif{font-size:21px;margin-right:4px}
+.nav-g{margin:14px 10px 8px}
+.nav a{display:flex;align-items:center;gap:12px;padding:10px 12px;border-radius:11px;text-decoration:none;color:#c9c9c4;font-weight:500;font-size:15px;transition:background .15s,color .15s}
+.nav a:hover{background:rgba(255,255,255,.05);color:var(--fg)}
+.nav a.on{background:var(--gbg);color:var(--g)}
+.nav svg{width:18px;height:18px;flex:none}
+.me{margin-top:auto;display:flex;align-items:center;gap:10px;padding:12px 10px;border-top:1px solid var(--line)}
+.av{width:34px;height:34px;border-radius:50%;display:grid;place-items:center;font-weight:700;font-size:13px;flex:none;background:#1b1d20;border:1px solid var(--line2);color:#ddd}
+.me .nm{font-size:14px;font-weight:600;line-height:1.2;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.me .lv{font-size:12px;color:var(--g)}
+.me button{margin-left:auto;color:var(--mut);padding:6px;border-radius:8px}
+.me button:hover{color:var(--fg);background:rgba(255,255,255,.06)}
+main{padding:40px 48px 80px;max-width:1180px;width:100%}
+.demo{display:flex;gap:10px;align-items:center;border:1px dashed rgba(34,224,122,.4);background:rgba(34,224,122,.06);color:#bdf5d4;border-radius:12px;padding:10px 14px;font-size:13.5px;margin-bottom:26px}
+
+/* ---------- type ---------- */
+h1{font-size:34px;font-weight:700;letter-spacing:-.03em;line-height:1.15}
+h2{font-size:21px;font-weight:700;letter-spacing:-.02em;display:flex;align-items:center;gap:10px}
+h2 .ic{color:var(--g);width:20px;height:20px}
+.sub{color:var(--mut);font-size:14.5px;margin-top:4px}
+.sec{margin-top:40px}
+.sec-h{display:flex;justify-content:space-between;align-items:flex-end;gap:16px;margin-bottom:16px}
+.link{color:var(--g);font-size:14px;text-decoration:none;font-weight:500}
+
+/* ---------- cards ---------- */
+.card{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:22px}
+.grid2{display:grid;grid-template-columns:1.25fr 1fr;gap:18px}
+.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.stat b{display:block;font-size:30px;font-weight:700;letter-spacing:-.03em;line-height:1.1}
+.stat b small{font-size:15px;color:var(--mut);font-weight:500}
+.stat span{font-size:13px;color:var(--mut)}
+.bar{height:6px;border-radius:99px;background:rgba(255,255,255,.08);overflow:hidden;margin-top:14px}
+.bar i{display:block;height:100%;background:linear-gradient(90deg,var(--g2),var(--g));border-radius:99px;box-shadow:0 0 12px rgba(34,224,122,.6)}
+
+/* ---------- habits ---------- */
+.habits{display:grid;grid-template-columns:repeat(5,1fr);gap:12px}
+.hb{position:relative;text-align:left;border:1px solid var(--line2);background:rgba(255,255,255,.03);border-radius:16px;padding:16px 14px 14px;transition:transform .12s,border-color .15s,background .15s;min-height:132px;display:flex;flex-direction:column}
+.hb:hover{transform:translateY(-2px);border-color:rgba(255,255,255,.28)}
+.hb:disabled{cursor:default;transform:none;opacity:.55}
+.hb .em{font-size:24px;line-height:1}
+.hb .t{font-weight:700;font-size:16px;margin-top:12px}
+.hb .d{font-size:12.5px;color:var(--mut);line-height:1.35;margin-top:3px}
+.hb .ck{position:absolute;top:12px;right:12px;width:24px;height:24px;border-radius:50%;border:1.5px solid var(--line2);display:grid;place-items:center;transition:all .15s}
+.hb.on{border-color:rgba(34,224,122,.65);background:linear-gradient(180deg,rgba(34,224,122,.16),rgba(34,224,122,.05))}
+.hb.on .ck{background:var(--g);border-color:var(--g);color:#04140A;box-shadow:0 0 12px rgba(34,224,122,.7)}
+.hb.on .ck::after{content:"✓";font-weight:800;font-size:13px}
+.daybar{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:16px;flex-wrap:wrap}
+.daysw{display:flex;gap:6px;background:rgba(255,255,255,.04);border:1px solid var(--line);padding:4px;border-radius:99px}
+.daysw button{padding:7px 14px;border-radius:99px;font-size:13.5px;font-weight:600;color:var(--mut)}
+.daysw button.on{background:var(--fg);color:var(--bg)}
+.pill{display:inline-flex;align-items:center;gap:8px;border:1px solid var(--line2);border-radius:99px;padding:6px 12px;font-size:13px;color:#d6d6d1}
+.pill.g{border-color:rgba(34,224,122,.45);color:var(--g);background:var(--gbg)}
+.dot{width:8px;height:8px;border-radius:50%;background:var(--g);box-shadow:0 0 6px 1px rgba(34,224,122,.9)}
+.closed{margin-top:16px;display:flex;align-items:center;gap:12px;padding:14px 16px;border-radius:14px;background:linear-gradient(90deg,rgba(34,224,122,.18),rgba(34,224,122,.04));border:1px solid rgba(34,224,122,.4);font-weight:600}
+
+/* calendar */
+.cal{display:grid;grid-template-columns:repeat(7,1fr);gap:7px}
+.cal .wd{font-family:var(--f-mono);font-size:10.5px;color:var(--mut2);text-align:center;letter-spacing:.1em}
+.cal .c{aspect-ratio:1;border-radius:9px;display:grid;place-items:center;font-size:12.5px;font-weight:600;color:var(--mut);background:rgba(255,255,255,.04);border:1px solid transparent;position:relative}
+.cal .c.fut{opacity:.35}
+.cal .c.today{border-color:var(--fg);color:var(--fg)}
+.cal .c[data-n="1"]{background:rgba(34,224,122,.14);color:#cdf7de}
+.cal .c[data-n="2"]{background:rgba(34,224,122,.26);color:#e5fbee}
+.cal .c[data-n="3"]{background:rgba(34,224,122,.42);color:#fff}
+.cal .c[data-n="4"]{background:rgba(34,224,122,.62);color:#04140A}
+.cal .c[data-n="5"]{background:var(--g);color:#04140A;box-shadow:0 0 10px rgba(34,224,122,.55)}
+.legend{display:flex;align-items:center;gap:5px;font-size:12px;color:var(--mut);margin-top:14px}
+.legend i{width:13px;height:13px;border-radius:4px;display:inline-block}
+
+/* turma / ranking */
+.turma{display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+.stack{display:flex}
+.stack .av{width:32px;height:32px;margin-left:-8px;border:2px solid var(--bg)}
+.stack .av:first-child{margin-left:0}
+.rank{display:flex;flex-direction:column;gap:8px}
+.row{display:grid;grid-template-columns:40px 40px 1fr auto auto;gap:14px;align-items:center;padding:12px 16px;border-radius:14px;background:var(--card);border:1px solid var(--line)}
+.row.me-row{border-color:rgba(34,224,122,.5);background:rgba(34,224,122,.07)}
+.row .pos{font-family:var(--f-mono);font-weight:500;color:var(--mut);font-size:14px}
+.row .pos.top{color:var(--g)}
+.row .n{font-weight:600}
+.row .n small{display:block;font-weight:400;color:var(--mut);font-size:12.5px}
+.row .s{font-size:13px;color:var(--mut);text-align:right;white-space:nowrap}
+.row .s b{color:var(--fg);font-size:16px}
+.mini5{display:flex;gap:3px}
+.mini5 i{width:7px;height:16px;border-radius:3px;background:rgba(255,255,255,.1)}
+.mini5 i.on{background:var(--g);box-shadow:0 0 6px rgba(34,224,122,.6)}
+.podium{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:18px}
+.pod{text-align:center;padding:22px 14px}
+.pod .av{width:56px;height:56px;font-size:18px;margin:0 auto 10px}
+.pod .medal{font-family:var(--f-mono);font-size:12px;display:inline-block;padding:3px 10px;border-radius:99px;margin-bottom:12px;background:rgba(255,255,255,.08)}
+.pod.p1 .medal{background:var(--g);color:#04140A}
+.pod b{display:block}
+.pod span{font-size:13px;color:var(--mut)}
+
+/* calls */
+.calls{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:16px}
+.call{background:var(--card);border:1px solid var(--line);border-radius:16px;overflow:hidden;text-align:left;display:flex;flex-direction:column;transition:transform .15s,border-color .15s}
+.call:hover{transform:translateY(-3px);border-color:var(--line2)}
+.thumb{position:relative;aspect-ratio:16/9;background:#111 center/cover;display:grid;place-items:center;overflow:hidden}
+.thumb .num{position:absolute;left:12px;bottom:-14px;font:800 74px/1 var(--f-sans);letter-spacing:-.05em;color:rgba(255,255,255,.12)}
+.thumb .play{width:48px;height:48px;border-radius:50%;background:rgba(8,9,10,.6);border:1px solid rgba(255,255,255,.35);display:grid;place-items:center;backdrop-filter:blur(4px)}
+.thumb .soon{position:absolute;top:10px;right:10px}
+.thumb.empty{background:radial-gradient(ellipse at 70% 30%,rgba(34,224,122,.18),transparent 60%),#0d0f10}
+.call .info{padding:14px 16px 16px}
+.call .ti{font-weight:600;font-size:15px;line-height:1.3}
+.call .mt{font-size:12.5px;color:var(--mut);margin-top:6px;display:flex;justify-content:space-between}
+
+/* benefícios */
+.ben{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:16px}
+.ben .card{display:flex;flex-direction:column;gap:10px}
+.ben .tag{align-self:flex-start}
+.ben h3{font-size:19px;letter-spacing:-.02em}
+.ben p{color:var(--mut);font-size:14.5px}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:13px 20px;border-radius:99px;font-weight:600;font-size:15px;text-decoration:none;background:linear-gradient(180deg,#3BF08E,#16C566);color:#04140A;box-shadow:0 0 0 1px rgba(34,224,122,.4),0 8px 28px -8px rgba(34,224,122,.6);transition:transform .15s}
+.btn:hover{transform:translateY(-1px)}
+.btn.ghost{background:transparent;color:var(--fg);box-shadow:inset 0 0 0 1px var(--line2)}
+.btn[aria-disabled="true"]{opacity:.45;pointer-events:none}
+.ben .btn{margin-top:auto;align-self:flex-start}
+
+/* modal */
+.modal{position:fixed;inset:0;background:rgba(0,0,0,.82);backdrop-filter:blur(6px);display:grid;place-items:center;padding:20px;z-index:50}
+.modal .box{width:min(960px,100%)}
+.modal .vid{aspect-ratio:16/9;border-radius:16px;overflow:hidden;background:#000;border:1px solid var(--line2)}
+.modal iframe{width:100%;height:100%;border:0}
+.modal .top{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;gap:12px}
+.modal .x{width:38px;height:38px;border-radius:50%;border:1px solid var(--line2);font-size:18px;flex:none}
+
+/* login */
+.login{min-height:100vh;display:grid;place-items:center;padding:24px}
+.login .box{width:min(420px,100%);text-align:center}
+.login .logo{margin:0 auto}
+.login h1{font-size:44px;margin:22px 0 6px;display:flex;justify-content:center;gap:12px;align-items:baseline}
+.login h1 .serif{font-size:52px;font-weight:500}
+.login h1 b{font-weight:800;letter-spacing:-.04em}
+.login form{margin-top:30px;display:flex;flex-direction:column;gap:12px;text-align:left}
+.login label{font-size:13px;color:var(--mut)}
+.inp{width:100%;padding:15px 16px;border-radius:13px;border:1px solid var(--line2);background:rgba(255,255,255,.04);color:var(--fg);font:inherit;font-size:16px;outline:none}
+.inp:focus{border-color:var(--g);box-shadow:0 0 0 3px rgba(34,224,122,.18)}
+.login .btn{width:100%;padding:16px;margin-top:4px}
+.msg{font-size:14px;color:var(--mut);margin-top:14px;min-height:22px}
+.msg.ok{color:var(--g)}.msg.err{color:#ff8a8a}
+
+.toast{position:fixed;left:50%;bottom:28px;transform:translateX(-50%) translateY(20px);opacity:0;transition:all .25s;background:var(--fg);color:var(--bg);font-weight:600;padding:12px 18px;border-radius:99px;font-size:14px;z-index:60;pointer-events:none}
+.toast.on{opacity:1;transform:translateX(-50%) translateY(0)}
+
+/* ---------- mobile ---------- */
+.tabbar{display:none}
+@media (max-width:960px){
+  .habits{grid-template-columns:repeat(3,1fr)}
+  .grid2{grid-template-columns:1fr}
+}
+@media (max-width:760px){
+  .app{grid-template-columns:1fr}
+  .side{display:none}
+  main{padding:22px 16px 110px}
+  h1{font-size:27px}
+  .habits{grid-template-columns:1fr 1fr}
+  .hb{min-height:118px}
+  .grid3{grid-template-columns:1fr 1fr 1fr;gap:10px}
+  .stat b{font-size:23px}
+  .card{padding:16px;border-radius:16px}
+  .row{grid-template-columns:30px 34px 1fr auto;gap:10px;padding:10px 12px}
+  .row .mini5{display:none}
+  .row .av{width:34px;height:34px}
+  .podium{gap:8px}.pod{padding:16px 6px}.pod .av{width:44px;height:44px}
+  .mtop{display:flex!important}
+  .tabbar{display:grid;grid-template-columns:repeat(5,1fr);position:fixed;left:0;right:0;bottom:0;z-index:40;background:rgba(8,9,10,.92);backdrop-filter:blur(12px);border-top:1px solid var(--line);padding:8px 4px calc(8px + env(safe-area-inset-bottom))}
+  .tabbar a{display:flex;flex-direction:column;align-items:center;gap:3px;font-size:10.5px;color:var(--mut);text-decoration:none;padding:4px 0}
+  .tabbar a svg{width:21px;height:21px}
+  .tabbar a.on{color:var(--g)}
+}
+.mtop{display:none;align-items:center;justify-content:space-between;margin-bottom:20px}
+</style>
+</head>
+<body>
+<div id="root"></div>
+<div class="toast" id="toast"></div>
+
+<script src="config.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
+<script>
+(() => {
+const C = window.SAFRA_CONFIG;
+const DEMO = !C.SUPABASE_URL;
+const sb = DEMO ? null : window.supabase.createClient(C.SUPABASE_URL, C.SUPABASE_ANON_KEY);
+const $ = s => document.querySelector(s);
+const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+
+/* ---------- datas (fuso de São Paulo) ---------- */
+const fmt = new Intl.DateTimeFormat("en-CA", {timeZone:"America/Sao_Paulo"});
+const TODAY = fmt.format(new Date());
+const addDays = (d, n) => { const t = new Date(d + "T12:00:00Z"); t.setUTCDate(t.getUTCDate() + n); return t.toISOString().slice(0,10); };
+const YESTERDAY = addDays(TODAY, -1);
+const DAYS = []; for (let d = C.INICIO; d <= C.FIM; d = addDays(d, 1)) DAYS.push(d);
+const dayIdx = d => DAYS.indexOf(d) + 1;
+const curDay = Math.min(Math.max(dayIdx(TODAY) || (TODAY < C.INICIO ? 0 : DAYS.length), 0), DAYS.length);
+const br = d => { const [y,m,dd] = d.split("-"); return `${dd}/${m}`; };
+const inRange = d => d >= C.INICIO && d <= C.FIM;
+
+const HABITS = [
+  {k:"corpo",    em:"💪", t:"Corpo",      d:"Treino, movimento ou cuidado com o shape"},
+  {k:"dinheiro", em:"💰", t:"Dinheiro",   d:"Uma ação que gera ou organiza grana"},
+  {k:"mente",    em:"📖", t:"Mente",      d:"Leitura, estudo ou foco sem tela"},
+  {k:"espirito", em:"🙏", t:"Espírito",   d:"Oração, gratidão ou silêncio"},
+  {k:"network",  em:"🤝", t:"Networking", d:"Falar com alguém da turma ou do mercado"}
+];
+
+/* ---------- ícones ---------- */
+const I = {
+  home:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 10.5 12 3l9 7.5V20a1 1 0 0 1-1 1h-5v-6h-6v6H4a1 1 0 0 1-1-1z"/></svg>',
+  check:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="5"/><path d="m8 12 3 3 5-6"/></svg>',
+  video:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2.5" y="6" width="13" height="12" rx="2.5"/><path d="m15.5 10.5 6-3.5v10l-6-3.5"/></svg>',
+  users:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20c.8-3.5 3.4-5.5 6.5-5.5s5.7 2 6.5 5.5"/><path d="M16 4.6a3.5 3.5 0 0 1 0 6.8M18 14.8c1.8.7 3 2.5 3.5 5.2"/></svg>',
+  gift:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="8" width="18" height="5" rx="1.5"/><path d="M5 13v7h14v-7M12 8v12M12 8S10.5 3.5 8 4.2 8 8 12 8zM12 8s1.5-4.5 4-3.8S16 8 12 8z"/></svg>',
+  out:'<svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M15 4h3a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2h-3M10 17l5-5-5-5M15 12H3"/></svg>',
+  flame:'<svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3s5 4.5 5 10a5 5 0 0 1-10 0c0-2.4 1.3-4 2.5-5 .2 1.8 1 3 2.5 3.5C12 9 12 6 12 3z"/></svg>',
+  play:'<svg width="18" height="18" viewBox="0 0 24 24" fill="#fff"><path d="M8 5.5v13l10.5-6.5z"/></svg>',
+  trophy:'<svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M7 4h10v5a5 5 0 0 1-10 0zM7 6H4a3 3 0 0 0 3 4M17 6h3a3 3 0 0 1-3 4M12 14v4M8 21h8"/></svg>'
+};
+const PLANT = [[1,11],[11,11],[51,11],[61,11],[1,21],[11,21],[21,21],[41,21],[51,21],[61,21],[11,31],[21,31],[31,31],[41,31],[51,31],[31,41],[31,51],[11,61],[21,61],[31,61],[41,61],[51,61]];
+const logo = s => `<svg class="logo" width="${s}" height="${s}" viewBox="0 0 70 70">${PLANT.map(([x,y])=>`<rect x="${x}" y="${y}" width="8" height="8" rx="2.6" fill="currentColor"/>`).join("")}</svg>`;
+const initials = n => (n||"?").trim().split(/\s+/).slice(0,2).map(w=>w[0]).join("").toUpperCase();
+const hue = n => { let h=0; for (const c of n||"") h=(h*31+c.charCodeAt(0))%360; return h; };
+const avatar = (n, extra="") => `<span class="av" style="background:hsl(${hue(n)} 22% 17%);color:hsl(${hue(n)} 60% 80%)" ${extra}>${esc(initials(n))}</span>`;
+
+/* ---------- camada de dados ---------- */
+const LS = {get:(k,d)=>{try{return JSON.parse(localStorage.getItem(k))??d}catch{return d}}, set:(k,v)=>{try{localStorage.setItem(k,JSON.stringify(v))}catch{}}};
+
+// turma de exemplo (só no modo demonstração)
+function demoTurma(){
+  const names=["Lucas Andrade","Marina Costa","Rafael Lima","Bia Fernandes","Pedro Henrique","Ana Clara","João Vitor","Camila Rocha","Gabriel Souza","Larissa Melo","Thiago Alves","Júlia Martins","Felipe Ramos","Duda Nogueira"];
+  let seed=7; const rnd=()=>(seed=(seed*9301+49297)%233280)/233280;
+  return names.map((name,i)=>{
+    const disc=.95-i*.045; const checks=new Set();
+    for(const d of DAYS){ if(d>TODAY) break; if(d===TODAY && rnd()>.6) continue;
+      for(const h of HABITS) if(rnd()<disc) checks.add(d+"|"+h.k); }
+    return {id:"demo"+i,name,checks};
+  });
+}
+
+const DB = {
+  async session(){
+    if (DEMO) { const n = LS.get("safra_demo_user"); return n ? {id:"me", name:n, email:"demo@novasafra"} : null; }
+    const { data:{ session } } = await sb.auth.getSession();
+    if (!session) return null;
+    const u = session.user;
+    const { data:p } = await sb.from("profiles").select("name").eq("id", u.id).maybeSingle();
+    return { id:u.id, email:u.email, name:p?.name || "" };
+  },
+  async isMember(){
+    if (DEMO) return true;
+    const { data, error } = await sb.rpc("is_member");
+    return !error && data === true;
+  },
+  async login(email){
+    if (DEMO) return { demo:true };
+    const { error } = await sb.auth.signInWithOtp({ email, options:{ emailRedirectTo: location.origin + location.pathname } });
+    if (error) throw error;
+    return {};
+  },
+  async logout(){ if (DEMO) { localStorage.removeItem("safra_demo_user"); return; } await sb.auth.signOut(); },
+  async saveName(me, name){
+    if (DEMO) { LS.set("safra_demo_user", name); return; }
+    const { error } = await sb.from("profiles").upsert({ id:me.id, name });
+    if (error) throw error;
+  },
+  async myChecks(me){
+    if (DEMO) return new Set(LS.get("safra_demo_checks", []));
+    const { data, error } = await sb.from("habit_checks").select("day,habit").eq("user_id", me.id);
+    if (error) throw error;
+    return new Set(data.map(r => r.day + "|" + r.habit));
+  },
+  async toggle(me, day, habit, on){
+    if (DEMO) { const s = new Set(LS.get("safra_demo_checks", [])); const k=day+"|"+habit; on ? s.add(k) : s.delete(k); LS.set("safra_demo_checks", [...s]); return; }
+    const q = on ? sb.from("habit_checks").insert({ user_id:me.id, day, habit })
+                 : sb.from("habit_checks").delete().match({ user_id:me.id, day, habit });
+    const { error } = await q; if (error && error.code !== "23505") throw error;
+  },
+  // ranking: [{id,name,total,today,streak}]
+  async ranking(me, myChecks){
+    if (DEMO) {
+      const rows = demoTurma().map(p => ({ id:p.id, name:p.name, ...score(p.checks) }));
+      rows.push({ id:"me", name:me.name, ...score(myChecks) });
+      return rows;
+    }
+    const { data, error } = await sb.rpc("leaderboard");
+    if (error) throw error;
+    return data.map(r => ({ id:r.user_id, name:r.name || "Semeador", total:r.total, today:r.today, streak:r.streak }));
+  },
+  async calls(){
+    if (DEMO) return [
+      { n:1, title:"Abertura da Safra: como a turma vai funcionar", presenter:"Nova Safra", call_date:"2026-11-20", youtube_id:"" },
+      { n:2, title:"Call da Safra #2", presenter:"Nova Safra", call_date:"2026-11-27", youtube_id:"" },
+      { n:3, title:"Call da Safra #3", presenter:"Nova Safra", call_date:"2026-12-04", youtube_id:"" },
+      { n:4, title:"Fechamento da Safra: planejando 2027", presenter:"Nova Safra", call_date:"2026-12-11", youtube_id:"" }
+    ];
+    const { data, error } = await sb.from("calls").select("*").order("call_date");
+    if (error) throw error;
+    return data.map((c,i) => ({ n:i+1, ...c }));
+  }
+};
+
+function score(checks){
+  let total=0, today=0; const perDay={};
+  for (const k of checks){ const [d,h]=k.split("|"); if(!inRange(d)) continue; total++; perDay[d]=(perDay[d]||0)+1; if(d===TODAY) today++; }
+  // sequência: dias seguidos com pelo menos 1 hábito, contando até hoje (ou até ontem, se hoje ainda está aberto)
+  let streak=0, d = perDay[TODAY] ? TODAY : YESTERDAY;
+  while (perDay[d] && inRange(d)) { streak++; d = addDays(d,-1); }
+  return { total, today, streak, perDay };
+}
+
+/* ---------- estado ---------- */
+const S = { me:null, checks:new Set(), rank:[], calls:[], editDay:TODAY };
+const toast = m => { const t=$("#toast"); t.textContent=m; t.classList.add("on"); clearTimeout(t._h); t._h=setTimeout(()=>t.classList.remove("on"),2200); };
+
+/* ---------- telas ---------- */
+const NAV = [
+  {r:"inicio",     t:"Início",     i:I.home},
+  {r:"fechamento", t:"Fechamento", i:I.check},
+  {r:"calls",      t:"Calls",      i:I.video},
+  {r:"semeadores", t:"Semeadores", i:I.users},
+  {r:"beneficios", t:"Benefícios", i:I.gift}
+];
+const route = () => (location.hash.replace("#/","") || "inicio");
+
+function shell(inner){
+  const r = route(); const sc = score(S.checks);
+  const lv = sc.streak >= 21 ? "Colheita" : sc.streak >= 7 ? "Broto forte" : sc.streak >= 1 ? "Broto" : "Semente";
+  return `<div class="app">
+  <aside class="side">
+    <div class="brand">${logo(30)}<div><span class="serif">Nova</span><b>Safra</b></div></div>
+    <div class="nav-g mono">Principal</div>
+    <nav class="nav">${NAV.slice(0,3).map(n=>`<a href="#/${n.r}" class="${r===n.r?"on":""}">${n.i}${n.t}</a>`).join("")}</nav>
+    <div class="nav-g mono">Comunidade</div>
+    <nav class="nav">${NAV.slice(3).map(n=>`<a href="#/${n.r}" class="${r===n.r?"on":""}">${n.i}${n.t}</a>`).join("")}
+      <a href="${esc(C.WHATSAPP)}" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20l1.3-3.8A8 8 0 1 1 8 19z"/></svg>Grupo da turma</a></nav>
+    <div class="me">${avatar(S.me.name)}<div style="min-width:0"><div class="nm">${esc(S.me.name)}</div><div class="lv">${lv}</div></div><button title="Sair" data-act="logout">${I.out}</button></div>
+  </aside>
+  <main>
+    <div class="mtop">${logo(26)}<button class="pill" data-act="logout">${I.out} Sair</button></div>
+    ${DEMO?`<div class="demo"><span class="dot"></span>Modo demonstração: suas marcações ficam só neste navegador e a turma é de exemplo.</div>`:""}
+    ${inner}
+  </main>
+  <nav class="tabbar">${NAV.map(n=>`<a href="#/${n.r}" class="${r===n.r?"on":""}">${n.i}${n.t}</a>`).join("")}</nav>
+  </div>`;
+}
+
+const greet = () => { const h = +new Intl.DateTimeFormat("pt-BR",{hour:"numeric",hour12:false,timeZone:"America/Sao_Paulo"}).format(new Date()); return h<12?"Bom dia":h<18?"Boa tarde":"Boa noite"; };
+const dias = n => n===1?"1 dia":n+" dias";
+const first = n => (n||"").split(" ")[0];
+
+function habitsBlock(day){
+  const editable = inRange(day) && (day===TODAY || day===YESTERDAY);
+  const n = HABITS.filter(h=>S.checks.has(day+"|"+h.k)).length;
+  return `<div class="habits">${HABITS.map(h=>{const on=S.checks.has(day+"|"+h.k);return `<button class="hb ${on?"on":""}" data-hb="${h.k}" data-day="${day}" ${editable?"":"disabled"} aria-pressed="${on}"><span class="ck"></span><span class="em">${h.em}</span><span class="t">${h.t}</span><span class="d">${h.d}</span></button>`}).join("")}</div>
+  ${n===5?`<div class="closed">${logo(22)}Dia fechado. Os 5 plantados. A turma tá vendo.</div>`:""}
+  ${!inRange(day)?`<p class="sub" style="margin-top:14px">A Safra roda de ${br(C.INICIO)} a ${br(C.FIM)}. As marcações abrem no primeiro dia.</p>`:""}`;
+}
+
+function pageInicio(){
+  const sc = score(S.checks); const nToday = sc.perDay[TODAY]||0;
+  const closedToday = S.rank.filter(r=>r.today>0);
+  const nextCall = S.calls.find(c=>c.call_date>=TODAY) || S.calls[S.calls.length-1];
+  const lastCall = [...S.calls].reverse().find(c=>c.youtube_id);
+  return shell(`
+  <h1>${greet()}, ${esc(first(S.me.name))}</h1>
+  <p class="sub">Dia ${curDay} de ${DAYS.length} da Safra. ${dias(DAYS.length-curDay+1)} para 2027.</p>
+  <div class="bar" style="max-width:420px"><i style="width:${(curDay/DAYS.length*100).toFixed(1)}%"></i></div>
+
+  <section class="sec">
+    <div class="sec-h"><div><h2>${I.flame}Fechamento de hoje</h2><p class="sub">${nToday}/5 plantados · toque para marcar</p></div><a class="link" href="#/fechamento">Ver calendário ›</a></div>
+    ${habitsBlock(TODAY)}
+  </section>
+
+  <section class="sec grid3">
+    <div class="card stat"><b>${sc.streak} <small>${sc.streak===1?"dia":"dias"}</small></b><span>Sequência atual</span></div>
+    <div class="card stat"><b>${sc.total}</b><span>Hábitos plantados</span></div>
+    <div class="card stat"><b>${closedToday.length}</b><span>Semeadores ativos hoje</span></div>
+  </section>
+
+  <section class="sec grid2">
+    <div class="card">
+      <div class="mono" style="margin-bottom:12px">${lastCall?"Última call":"Próxima call"}</div>
+      ${callCard(lastCall||nextCall, true)}
+    </div>
+    <div class="card">
+      <div class="mono" style="margin-bottom:12px">A turma hoje</div>
+      <div class="turma"><div class="stack">${closedToday.slice(0,7).map(r=>avatar(r.name,`title="${esc(r.name)}"`)).join("")}</div>
+      <span class="sub" style="margin:0">${closedToday.length ? `${closedToday.length} já plantaram hoje` : "Ninguém plantou ainda. Seja o primeiro."}</span></div>
+      <div class="rank" style="margin-top:16px">${S.rank.slice(0,3).map((r,i)=>rowHTML(r,i)).join("")}</div>
+      <a class="link" href="#/semeadores" style="display:inline-block;margin-top:14px">Ver todos os semeadores ›</a>
+    </div>
+  </section>`);
+}
+
+function pageFechamento(){
+  const d = S.editDay; const sc = score(S.checks);
+  const first = new Date(C.INICIO+"T12:00:00Z").getUTCDay(); // 0=dom
+  const pad = (first+6)%7; // semana começando na segunda
+  return shell(`
+  <h1>Fechamento diário</h1>
+  <p class="sub">Marque os hábitos que você plantou. Dá para ajustar hoje e ontem.</p>
+  <section class="sec">
+    <div class="daybar">
+      <div class="daysw"><button data-day-sel="${TODAY}" class="${d===TODAY?"on":""}">Hoje · ${br(TODAY)}</button><button data-day-sel="${YESTERDAY}" class="${d===YESTERDAY?"on":""}">Ontem · ${br(YESTERDAY)}</button></div>
+      <span class="pill g"><span class="dot"></span>${dias(sc.streak)} seguidos</span>
+    </div>
+    ${habitsBlock(d)}
+  </section>
+  <section class="sec grid2">
+    <div class="card">
+      <div class="sec-h" style="margin-bottom:14px"><div><h2>Seus 45 dias</h2><p class="sub">Cada quadrado é um dia. Quanto mais verde, mais hábitos.</p></div></div>
+      <div class="cal">${["S","T","Q","Q","S","S","D"].map(w=>`<div class="wd">${w}</div>`).join("")}${"<div></div>".repeat(pad)}${DAYS.map(x=>`<div class="c ${x>TODAY?"fut":""} ${x===TODAY?"today":""}" data-n="${sc.perDay[x]||0}" title="${br(x)}: ${sc.perDay[x]||0}/5">${+x.slice(8)}</div>`).join("")}</div>
+      <div class="legend">menos <i style="background:rgba(255,255,255,.06)"></i><i style="background:rgba(34,224,122,.14)"></i><i style="background:rgba(34,224,122,.42)"></i><i style="background:rgba(34,224,122,.62)"></i><i style="background:var(--g)"></i> mais</div>
+    </div>
+    <div class="card">
+      <h2 style="margin-bottom:16px">Por hábito</h2>
+      ${HABITS.map(h=>{const n=DAYS.filter(x=>S.checks.has(x+"|"+h.k)).length;const base=Math.max(curDay,1);return `<div style="margin-bottom:16px"><div style="display:flex;justify-content:space-between;font-size:14.5px"><span>${h.em} ${h.t}</span><span class="sub" style="margin:0">${n}/${base} dias</span></div><div class="bar" style="margin-top:8px"><i style="width:${Math.min(100,n/base*100)}%"></i></div></div>`}).join("")}
+    </div>
+  </section>`);
+}
+
+function callCard(c, wide){
+  if (!c) return `<p class="sub">As calls aparecem aqui.</p>`;
+  const has = !!c.youtube_id;
+  const bg = has ? `style="background-image:url(https://i.ytimg.com/vi/${encodeURIComponent(c.youtube_id)}/hqdefault.jpg)"` : "";
+  return `<button class="call" ${has?`data-call="${esc(c.youtube_id)}" data-title="${esc(c.title)}"`:""} style="${wide?"width:100%":""}">
+    <div class="thumb ${has?"":"empty"}" ${bg}><span class="num">${String(c.n).padStart(2,"0")}</span>${has?`<span class="play">${I.play}</span>`:`${logo(34)}<span class="pill soon">${c.call_date>=TODAY?"ao vivo "+br(c.call_date):"gravação em breve"}</span>`}</div>
+    <div class="info"><div class="ti">${esc(c.title)}</div><div class="mt"><span>${esc(c.presenter||"Nova Safra")}</span><span>${br(c.call_date)}</span></div></div></button>`;
+}
+function pageCalls(){
+  return shell(`<h1>Calls da Safra</h1><p class="sub">Toda semana ao vivo. A gravação fica aqui para quem não conseguiu ir.</p>
+  <section class="sec calls">${S.calls.map(c=>callCard(c)).join("")}</section>`);
+}
+
+function rowHTML(r,i){
+  const mine = r.id===S.me.id || r.id==="me";
+  return `<div class="row ${mine?"me-row":""}"><span class="pos ${i<3?"top":""}">#${i+1}</span>${avatar(r.name)}<span class="n">${esc(r.name)}${mine?" (você)":""}<small>${dias(r.streak)} seguidos</small></span><span class="mini5">${[0,1,2,3,4].map(k=>`<i class="${k<r.today?"on":""}"></i>`).join("")}</span><span class="s"><b>${r.total}</b> pts</span></div>`;
+}
+function pageSemeadores(){
+  const top = S.rank.slice(0,3); const order=[1,0,2];
+  return shell(`<h1>Semeadores</h1><p class="sub">Cada hábito marcado vale 1 ponto. As barrinhas mostram o fechamento de hoje.</p>
+  <section class="sec">
+    ${top.length>=3?`<div class="podium">${order.map(i=>{const r=top[i];return `<div class="card pod p${i+1}"><span class="medal">#${i+1}</span>${avatar(r.name)}<b>${esc(first(r.name))}</b><span>${r.total} pts · ${r.streak}d</span></div>`}).join("")}</div>`:""}
+    <div class="rank">${S.rank.map((r,i)=>rowHTML(r,i)).join("")}</div>
+  </section>`);
+}
+
+function pageBeneficios(){
+  return shell(`<h1>Benefícios</h1><p class="sub">O que vem junto com a sua vaga na turma.</p>
+  <section class="sec ben">
+    <div class="card"><span class="pill g tag">Bônus</span><h3>Skill de Motion</h3><p>A skill para criar motions com IA. Baixe e siga o passo a passo de instalação.</p>
+      <a class="btn" ${C.SKILL_URL?`href="${esc(C.SKILL_URL)}" target="_blank" rel="noopener"`:`aria-disabled="true"`}>${C.SKILL_URL?"Baixar a skill":"Liberada em breve"}</a></div>
+    <div class="card"><span class="pill tag">Comunidade</span><h3>Grupo da turma</h3><p>Onde a turma conversa, troca network e avisa das calls ao vivo.</p>
+      <a class="btn ghost" href="${esc(C.WHATSAPP)}" target="_blank" rel="noopener">Entrar no grupo</a></div>
+    <div class="card"><span class="pill tag">Toda semana</span><h3>Call da Safra ao vivo</h3><p>4 calls ao vivo durante os 45 dias, com gravação aqui na área.</p>
+      <a class="btn ghost" href="#/calls">Ver as calls</a></div>
+  </section>`);
+}
+
+function pageLogin(state={}){
+  return `<div class="login"><div class="box">
+    ${logo(64)}
+    <h1><span class="serif">Nova</span><b>Safra</b></h1>
+    <p class="sub">Área do Semeador</p>
+    ${state.needName ? `
+    <form id="nameForm"><label for="nm">Como a turma vai te chamar?</label><input class="inp" id="nm" required maxlength="40" placeholder="Seu nome" autocomplete="name"><button class="btn" type="submit">Entrar na turma</button></form>`
+    : DEMO ? `
+    <form id="nameForm"><label for="nm">Seu nome (modo demonstração)</label><input class="inp" id="nm" required maxlength="40" placeholder="Seu nome" autocomplete="name"><button class="btn" type="submit">Ver a área</button></form>`
+    : `
+    <form id="loginForm"><label for="em">E-mail usado na compra</label><input class="inp" id="em" type="email" required placeholder="voce@email.com" autocomplete="email"><button class="btn" type="submit">Receber link de acesso</button></form>`}
+    <p class="msg ${state.cls||""}" id="msg">${esc(state.msg||"")}</p>
+  </div></div>`;
+}
+
+/* ---------- render ---------- */
+const PAGES = { inicio:pageInicio, fechamento:pageFechamento, calls:pageCalls, semeadores:pageSemeadores, beneficios:pageBeneficios };
+function sortRank(){ S.rank.sort((a,b)=>b.total-a.total||b.streak-a.streak||a.name.localeCompare(b.name)); }
+function render(){
+  if (!S.me) return;
+  const p = PAGES[route()] || pageInicio;
+  $("#root").innerHTML = p();
+  window.scrollTo({top:0});
+}
+function refreshMine(){ // atualiza a linha do próprio usuário no ranking sem ir ao servidor
+  const mine = S.rank.find(r=>r.id===S.me.id||r.id==="me");
+  if (mine) Object.assign(mine, score(S.checks)); sortRank();
+}
+
+document.addEventListener("click", async e => {
+  const hb = e.target.closest("[data-hb]");
+  if (hb && !hb.disabled) {
+    const day = hb.dataset.day, h = hb.dataset.hb, k = day+"|"+h, on = !S.checks.has(k);
+    on ? S.checks.add(k) : S.checks.delete(k); refreshMine();
+    const y = window.scrollY; $("#root").innerHTML = (PAGES[route()]||pageInicio)(); window.scrollTo(0,y);
+    if (on && HABITS.every(x=>S.checks.has(day+"|"+x.k))) toast("Dia fechado. 5 de 5 🌱");
+    try { await DB.toggle(S.me, day, h, on); }
+    catch(err){ on ? S.checks.delete(k) : S.checks.add(k); refreshMine(); render(); toast("Não salvou. Tenta de novo."); console.error(err); }
+    return;
+  }
+  const ds = e.target.closest("[data-day-sel]");
+  if (ds) { S.editDay = ds.dataset.daySel; const y=window.scrollY; $("#root").innerHTML = pageFechamento(); window.scrollTo(0,y); return; }
+  const cl = e.target.closest("[data-call]");
+  if (cl) { openVideo(cl.dataset.call, cl.dataset.title); return; }
+  const act = e.target.closest("[data-act]");
+  if (act?.dataset.act === "logout") { await DB.logout(); location.hash=""; location.reload(); }
+  if (e.target.closest("[data-close]") || e.target.classList.contains("modal")) document.querySelector(".modal")?.remove();
+});
+document.addEventListener("keydown", e => { if (e.key==="Escape") document.querySelector(".modal")?.remove(); });
+
+function openVideo(id, title){
+  const m = document.createElement("div"); m.className="modal";
+  m.innerHTML = `<div class="box"><div class="top"><b>${esc(title)}</b><button class="x" data-close aria-label="Fechar">✕</button></div><div class="vid"><iframe src="https://www.youtube-nocookie.com/embed/${encodeURIComponent(id)}?autoplay=1&rel=0&modestbranding=1" allow="autoplay; encrypted-media; picture-in-picture; fullscreen" allowfullscreen></iframe></div></div>`;
+  document.body.appendChild(m);
+}
+
+document.addEventListener("submit", async e => {
+  e.preventDefault();
+  if (e.target.id === "loginForm") {
+    const email = $("#em").value.trim().toLowerCase(); const b = e.target.querySelector("button"); b.disabled = true;
+    try { await DB.login(email); $("#msg").className="msg ok"; $("#msg").textContent = "Pronto! Abra o link que mandamos para "+email+"."; }
+    catch(err){ $("#msg").className="msg err"; $("#msg").textContent = "Não deu para enviar. Confira o e-mail e tente de novo."; b.disabled=false; console.error(err); }
+  }
+  if (e.target.id === "nameForm") {
+    const name = $("#nm").value.trim(); if (!name) return;
+    const me = S.me || { id:"me" };
+    try { await DB.saveName(me, name); } catch(err){ $("#msg").className="msg err"; $("#msg").textContent="Não salvou o nome. Tenta de novo."; return; }
+    boot();
+  }
+});
+
+async function load(){
+  [S.checks, S.calls] = await Promise.all([DB.myChecks(S.me), DB.calls()]);
+  S.rank = await DB.ranking(S.me, S.checks); sortRank();
+}
+
+async function boot(){
+  try {
+    const me = await DB.session();
+    if (!me) { $("#root").innerHTML = pageLogin(); return; }
+    if (!(await DB.isMember())) { await sb.auth.signOut(); $("#root").innerHTML = pageLogin({msg:"Esse e-mail ainda não está na turma. Use o mesmo e-mail da compra ou fale com a gente no grupo.", cls:"err"}); return; }
+    S.me = me;
+    if (!me.name) { $("#root").innerHTML = pageLogin({needName:true}); return; }
+    await load(); render();
+  } catch(err){ console.error(err); $("#root").innerHTML = pageLogin({msg:"Algo deu errado ao carregar. Recarregue a página.", cls:"err"}); }
+}
+
+window.addEventListener("hashchange", render);
+if (!DEMO) sb.auth.onAuthStateChange((ev) => { if (ev === "SIGNED_IN" && !S.me) boot(); });
+boot();
+})();
+</script>
+</body>
+</html>
