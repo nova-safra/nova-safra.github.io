@@ -29,7 +29,8 @@ document.addEventListener('DOMContentLoaded',function(){
 <link rel="icon" href="favicon.svg" type="image/svg+xml">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant:ital,wght@0,500;0,600;1,500&family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500&display=swap">
+<link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Cormorant:ital,wght@0,500;0,600;1,500&family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500&display=swap" onload="this.onload=null;this.rel='stylesheet'">
+<noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant:ital,wght@0,500;0,600;1,500&family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500&display=swap"></noscript>
 <style>
 /* Layout: clássico + tecnologia. Serifa para emoção, Geist para clareza, Geist Mono para a camada "sistema".
    Fundo com grade de pontos, cartões arredondados de vidro escuro, interface de app e chat de IA como prova do produto. */
@@ -464,7 +465,7 @@ svg.mark rect{transform-box:fill-box;transform-origin:center;animation:px .5s cu
     </div>
     <span class="status"><span class="dot"></span><span>Faltam <b id="sDays" style="color:var(--fg)">45</b> dias para 2027</span></span>
     <div class="vsl" id="vslBox">
-      <video id="vsl" autoplay muted loop playsinline preload="auto" poster="vsl-poster.jpg"><source src="vsl.mp4" type="video/mp4"></video>
+      <video id="vsl" muted loop playsinline preload="none" poster="vsl-poster.jpg"></video>
       <button class="vsl-unmute" id="vslUnmute" type="button" aria-label="Ativar o som e assistir do começo"><span class="pill"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 5 6 9H2v6h4l5 4V5z"/><path d="m23 9-6 6M17 9l6 6"/></svg><b>Clique para ativar o som</b><small>o vídeo volta do começo</small></span></button>
       <div class="vsl-bar">
         <button type="button" id="vslSound" aria-label="Ativar som"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 5 6 9H2v6h4l5 4V5z"/><path d="m23 9-6 6M17 9l6 6"/></svg></span><span class="t">ativar som</span></button>
@@ -789,11 +790,14 @@ svg.mark rect{transform-box:fill-box;transform-origin:center;animation:px .5s cu
   const snd=document.getElementById("vslSound"), ICON_OFF=snd.querySelector(".ic").innerHTML,
     ICON_ON='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 5 6 9H2v6h4l5 4V5z"/><path d="M15.5 8.5a5 5 0 0 1 0 7M19 5a10 10 0 0 1 0 14"/></svg>';
   function sync(){snd.querySelector(".ic").innerHTML=v.muted?ICON_OFF:ICON_ON;snd.querySelector(".t").textContent=v.muted?"ativar som":"sem som";snd.setAttribute("aria-label",v.muted?"Ativar som":"Desativar som");}
-  function fromStart(){v.currentTime=0;v.muted=false;box.classList.add("on");v.play().catch(()=>{});sync();}
+  function load(){if(v.getAttribute("src"))return;v.src=matchMedia("(max-width:768px)").matches?"vsl-480.mp4":"vsl-720.mp4";v.load();}
+  function fromStart(){load();v.currentTime=0;v.muted=false;box.classList.add("on");v.play().catch(()=>{});sync();}
   document.getElementById("vslUnmute").addEventListener("click",fromStart);
   document.getElementById("vslRestart").addEventListener("click",()=>{v.currentTime=0;v.play().catch(()=>{});});
   snd.addEventListener("click",()=>{if(!box.classList.contains("on")){fromStart();return;}v.muted=!v.muted;if(!v.muted)v.play().catch(()=>{});sync();});
-  v.play().catch(()=>{});
+  // o vídeo só começa a baixar depois que a página terminou de carregar
+  function start(){setTimeout(()=>{load();v.play().catch(()=>{});},200);}
+  if(document.readyState==="complete")start();else addEventListener("load",start,{once:true});
 })();
 </script>
 </html>
