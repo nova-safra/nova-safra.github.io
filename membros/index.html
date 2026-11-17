@@ -146,6 +146,14 @@ h2 .ic{color:var(--g);width:20px;height:20px}
 .btn[aria-disabled="true"]{opacity:.45;pointer-events:none}
 .ben .btn{margin-top:auto;align-self:flex-start}
 
+.grupo{display:flex;align-items:center;gap:14px;margin-top:22px;text-decoration:none;border-color:rgba(34,224,122,.4);background:linear-gradient(90deg,rgba(34,224,122,.12),rgba(34,224,122,.03))}
+.grupo .gi{width:44px;height:44px;border-radius:12px;display:grid;place-items:center;background:var(--gbg);color:var(--g);flex:none}
+.grupo .gt{flex:1;min-width:0}
+.grupo .gt b{display:block;font-size:16px}
+.grupo .gt small{display:block;color:var(--mut);font-size:13.5px}
+.grupo .btn{flex:none;padding:11px 18px;font-size:14px}
+@media (max-width:760px){.grupo{flex-wrap:wrap}.grupo .btn{width:100%}}
+
 /* modal */
 .modal{position:fixed;inset:0;background:rgba(0,0,0,.82);backdrop-filter:blur(6px);display:grid;place-items:center;padding:20px;z-index:50}
 .modal .box{width:min(960px,100%)}
@@ -395,6 +403,12 @@ function pageInicio(){
   <h1>${greet()}, ${esc(first(S.me.name))}</h1>
   <p class="sub">Dia ${curDay} de ${DAYS.length} da Safra. ${dias(DAYS.length-curDay+1)} para 2027.</p>
   <div class="bar" style="max-width:420px"><i style="width:${(curDay/DAYS.length*100).toFixed(1)}%"></i></div>
+
+  <a class="card grupo" href="${esc(C.WHATSAPP)}" target="_blank" rel="noopener">
+    <span class="gi"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20l1.3-3.8A8 8 0 1 1 8 19z"/></svg></span>
+    <span class="gt"><b>Entre no grupo da turma</b><small>É lá que a turma conversa e avisa das calls ao vivo.</small></span>
+    <span class="btn">Entrar no grupo</span>
+  </a>
 
   <section class="sec">
     <div class="sec-h"><div><h2>${I.flame}Fechamento de hoje</h2><p class="sub">${nToday}/5 plantados · toque para marcar</p></div><a class="link" href="#/fechamento">Ver calendário ›</a></div>
