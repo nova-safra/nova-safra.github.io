@@ -436,6 +436,7 @@ svg.mark rect{transform-box:fill-box;transform-origin:center;animation:px .5s cu
 .offer a.cta[data-checkout]:hover,.last-call a.cta[data-checkout]:hover{background:linear-gradient(180deg,#5CF5A3,#1BD472)}
 .offer a.cta[data-checkout]:focus-visible,.last-call a.cta[data-checkout]:focus-visible{outline:2px solid #22E07A}
 .offer a.cta[data-checkout]::after,.last-call a.cta[data-checkout]::after{background:linear-gradient(110deg,transparent 35%,rgba(255,255,255,.45) 50%,transparent 65%)!important}
+.split.solo{grid-template-columns:minmax(0,440px);justify-content:center}
 </style>
 
 <!-- TOPO -->
@@ -519,9 +520,9 @@ svg.mark rect{transform-box:fill-box;transform-origin:center;animation:px .5s cu
 <section class="band">
   <div class="inner" style="padding-top:16px">
     <span class="label">como_funciona</span>
-    <h2 class="h2">Seu dia em <span class="s">dois toques.</span></h2>
-    <p class="sub">De dia, você faz o Bloco da Colheita: 90 minutos sem celular no que gera dinheiro. À noite, marca o Fechamento.</p>
-    <div class="split">
+    <h2 class="h2">Seu dia em <span class="s">um check-in.</span></h2>
+    <p class="sub">À noite, você abre o Fechamento e marca os 5 hábitos do dia. Um toque por hábito, e sua sequência vai crescendo até 31/12.</p>
+    <div class="split solo">
       <div class="app">
         <div class="app-head"><span>fechamento</span><span>ter · 24/11</span></div>
         <div class="app-title"><b>Dia 08</b><span>de 45</span></div>
@@ -534,22 +535,6 @@ svg.mark rect{transform-box:fill-box;transform-origin:center;animation:px .5s cu
           <button class="hb" aria-pressed="false"><span>Networking<small>1 conexão de valor</small></span><span class="tg"></span></button>
         </div>
         <div class="app-foot"><span id="hCount">3/5 plantados</span><span>sequência: 8 dias</span></div>
-      </div>
-      <div class="app">
-        <div class="app-head"><span>bloco_da_colheita</span><span>● em foco</span></div>
-        <div class="timer-wrap">
-          <svg class="ring" viewBox="0 0 120 120" aria-hidden="true">
-            <circle cx="60" cy="60" r="52" class="ring-bg"/>
-            <circle cx="60" cy="60" r="52" class="ring-fg" id="ringFg"/>
-          </svg>
-          <div class="timer-num"><b id="focusTime">63:12</b><span>de 90:00</span></div>
-        </div>
-        <div class="tasks">
-          <div class="tk done"><span class="tk-c"></span>Escrever a headline da oferta</div>
-          <div class="tk now"><span class="tk-c"></span>Gravar o vídeo de 60 segundos</div>
-          <div class="tk"><span class="tk-c"></span>Subir a página com IA</div>
-        </div>
-        <div class="app-foot"><span>celular bloqueado</span><span>bloco 08 de 45</span></div>
       </div>
     </div>
     <p class="note" style="text-align:center">Telas ilustrativas. Os botões do check-in funcionam: experimente.</p>
@@ -717,15 +702,6 @@ svg.mark rect{transform-box:fill-box;transform-origin:center;animation:px .5s cu
       (function f(t){const p=Math.min(1,(t-t0)/dur), e=1-Math.pow(1-p,3);el.textContent=Math.round(end*e);if(p<1)requestAnimationFrame(f);})(t0);
     });
   }
-  // timer do Bloco da Colheita contando de verdade
-  const ft=document.getElementById("focusTime"), ring=document.getElementById("ringFg");
-  let rem=63*60+12; const total=90*60, C=326.7;
-  function drawT(){
-    ft.textContent=String(Math.floor(rem/60)).padStart(2,"0")+":"+String(rem%60).padStart(2,"0");
-    ring.style.strokeDashoffset=(C*(1-(total-rem)/total)).toFixed(1);
-  }
-  drawT();
-  setInterval(()=>{rem=rem>0?rem-1:total;drawT();},1000);
 
   // Terminal
   const start=new Date(2026,10,17);
