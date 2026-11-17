@@ -153,6 +153,24 @@ h2 .ic{color:var(--g);width:20px;height:20px}
 .grupo .gt small{display:block;color:var(--mut);font-size:13.5px}
 .grupo .btn{flex:none;padding:11px 18px;font-size:14px}
 @media (max-width:760px){.grupo{flex-wrap:wrap}.grupo .btn{width:100%}}
+/* pacto */
+.pacto{width:min(720px,100%);margin:0 auto}
+.pacto-full{min-height:100vh;padding:40px 20px 60px}
+.pacto .head{text-align:center;margin-bottom:28px}
+.pacto .head .logo{margin:0 auto 16px}
+.pacto .head h1 .serif{color:var(--g);font-size:1.1em}
+.pacto .head p{color:var(--mut);font-size:15px;margin-top:10px;line-height:1.55}
+.pacto form{display:flex;flex-direction:column;gap:14px}
+.pk{display:grid;grid-template-columns:44px 1fr;gap:4px 14px;padding:18px}
+.pk .em{font-size:26px;line-height:1;padding-top:2px}
+.pk .nm{font-weight:700;font-size:17px}
+.pk label{display:block;font-size:12.5px;color:var(--mut);margin:8px 0 6px}
+.pk .inp{padding:13px 14px;font-size:15.5px}
+.pk .inp.sm{font-size:14.5px;padding:11px 14px}
+.pacto .btn{margin-top:8px;padding:16px;font-size:16px}
+.pacto .note{text-align:center;font-size:13px;color:var(--mut2);margin-top:10px}
+.hb .d.mine{color:#d9d9d4;font-weight:500;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
+@media (max-width:760px){.pacto-full{padding:26px 16px 50px}.pk{grid-template-columns:30px 1fr;gap:4px 10px;padding:16px}.pk .em{font-size:22px}}
 /* título */
 .titulo{margin-top:18px;display:flex;align-items:center;gap:18px}
 .titulo .tic{width:52px;height:52px;border-radius:14px;display:grid;place-items:center;flex:none;background:var(--gbg);border:1px solid rgba(34,224,122,.4);color:var(--g);font:700 15px var(--f-mono)}
@@ -260,6 +278,13 @@ const HABITS = [
   {k:"espirito", em:"🙏", t:"Espírito",   d:"Oração, gratidão ou silêncio"},
   {k:"network",  em:"🤝", t:"Networking", d:"Falar com alguém da turma ou do mercado"}
 ];
+const PACT_EX = {
+  corpo:    ["treinar na academia",                    "chegar em 31/12 10 kg mais leve"],
+  dinheiro: ["1h30 construindo meu novo produto",      "faturar R$ 100 mil com o produto"],
+  mente:    ["ler 20 páginas",                         "terminar 3 livros até o fim do ano"],
+  espirito: ["orar 10 minutos ao acordar",             "terminar o ano em paz comigo"],
+  network:  ["falar com 1 pessoa nova do meu mercado", "fechar 3 parcerias até 31/12"]
+};
 
 /* ---------- ícones ---------- */
 const I = {
@@ -332,6 +357,18 @@ const DB = {
                  : sb.from("habit_checks").delete().match({ user_id:me.id, day, habit });
     const { error } = await q; if (error && error.code !== "23505") throw error;
   },
+  async pact(me){
+    if (DEMO) return LS.get("safra_demo_pact", {});
+    const { data, error } = await sb.from("pacts").select("habit,activity,goal").eq("user_id", me.id);
+    if (error) throw error;
+    const o = {}; data.forEach(r => o[r.habit] = { activity:r.activity, goal:r.goal||"" }); return o;
+  },
+  async savePact(me, pact){
+    if (DEMO) { LS.set("safra_demo_pact", pact); return; }
+    const rows = HABITS.map(h => ({ user_id:me.id, habit:h.k, activity:pact[h.k].activity, goal:pact[h.k].goal || null }));
+    const { error } = await sb.from("pacts").upsert(rows, { onConflict:"user_id,habit" });
+    if (error) throw error;
+  },
   // ranking: [{id,name,total,today,streak}]
   async ranking(me, myChecks){
     if (DEMO) {
@@ -383,7 +420,8 @@ function showLevelUp(i){
 }
 
 /* ---------- estado ---------- */
-const S = { me:null, checks:new Set(), rank:[], calls:[], editDay:TODAY };
+const S = { me:null, checks:new Set(), rank:[], calls:[], pact:{}, editDay:TODAY };
+const pactDone = () => HABITS.every(h => S.pact[h.k]?.activity);
 const toast = m => { const t=$("#toast"); t.textContent=m; t.classList.add("on"); clearTimeout(t._h); t._h=setTimeout(()=>t.classList.remove("on"),2200); };
 
 /* ---------- telas ---------- */
@@ -403,7 +441,7 @@ function shell(inner){
   <aside class="side">
     <div class="brand">${logo(30)}<div><span class="serif">Nova</span><b>Safra</b></div></div>
     <div class="nav-g mono">Principal</div>
-    <nav class="nav">${NAV.slice(0,3).map(n=>`<a href="#/${n.r}" class="${r===n.r?"on":""}">${n.i}${n.t}</a>`).join("")}</nav>
+    <nav class="nav">${NAV.slice(0,3).map(n=>`<a href="#/${n.r}" class="${r===n.r?"on":""}">${n.i}${n.t}</a>`).join("")}<a href="#/pacto" class="${r==="pacto"?"on":""}"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21c-4-3-7-6.5-7-10.5A7 7 0 0 1 12 4a7 7 0 0 1 7 6.5C19 14.5 16 18 12 21z"/><path d="M12 8v6M9 11h6"/></svg>Meu Pacto</a></nav>
     <div class="nav-g mono">Comunidade</div>
     <nav class="nav">${NAV.slice(3).map(n=>`<a href="#/${n.r}" class="${r===n.r?"on":""}">${n.i}${n.t}</a>`).join("")}
       <a href="${esc(C.WHATSAPP)}" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20l1.3-3.8A8 8 0 1 1 8 19z"/></svg>Grupo da turma</a></nav>
@@ -426,7 +464,7 @@ const first = n => (n||"").split(" ")[0];
 function habitsBlock(day){
   const editable = inRange(day) && (day===TODAY || day===YESTERDAY);
   const n = HABITS.filter(h=>S.checks.has(day+"|"+h.k)).length;
-  return `<div class="habits">${HABITS.map(h=>{const on=S.checks.has(day+"|"+h.k);return `<button class="hb ${on?"on":""}" data-hb="${h.k}" data-day="${day}" ${editable?"":"disabled"} aria-pressed="${on}"><span class="ck"></span><span class="em">${h.em}</span><span class="t">${h.t}</span><span class="d">${h.d}</span></button>`}).join("")}</div>
+  return `<div class="habits">${HABITS.map(h=>{const on=S.checks.has(day+"|"+h.k);return `<button class="hb ${on?"on":""}" data-hb="${h.k}" data-day="${day}" ${editable?"":"disabled"} aria-pressed="${on}"><span class="ck"></span><span class="em">${h.em}</span><span class="t">${h.t}</span><span class="d ${S.pact[h.k]?.activity?"mine":""}">${esc(S.pact[h.k]?.activity || h.d)}</span></button>`}).join("")}</div>
   ${n===5?`<div class="closed">${logo(22)}Dia fechado. Os 5 plantados. A turma tá vendo.</div>`:""}
   ${!inRange(day)?`<p class="sub" style="margin-top:14px">A Safra roda de ${br(C.INICIO)} a ${br(C.FIM)}. As marcações abrem no primeiro dia.</p>`:""}`;
 }
@@ -461,7 +499,7 @@ function pageInicio(){
   </a>
 
   <section class="sec">
-    <div class="sec-h"><div><h2>${I.flame}Fechamento de hoje</h2><p class="sub">${nToday}/5 plantados · toque para marcar</p></div><a class="link" href="#/fechamento">Ver calendário ›</a></div>
+    <div class="sec-h"><div><h2>${I.flame}Fechamento de hoje</h2><p class="sub">${nToday}/5 do seu pacto cumpridos hoje · toque para marcar</p></div><a class="link" href="#/pacto">Editar meu pacto ›</a></div>
     ${habitsBlock(TODAY)}
   </section>
 
@@ -492,7 +530,7 @@ function pageFechamento(){
   const pad = (first+6)%7; // semana começando na segunda
   return shell(`
   <h1>Fechamento diário</h1>
-  <p class="sub">Marque os hábitos que você plantou. Dá para ajustar hoje e ontem.</p>
+  <p class="sub">Marque o que você cumpriu do seu pacto. Dá para ajustar hoje e ontem. <a class="link" href="#/pacto">Editar meu pacto</a></p>
   <section class="sec">
     <div class="daybar">
       <div class="daysw"><button data-day-sel="${TODAY}" class="${d===TODAY?"on":""}">Hoje · ${br(TODAY)}</button><button data-day-sel="${YESTERDAY}" class="${d===YESTERDAY?"on":""}">Ontem · ${br(YESTERDAY)}</button></div>
@@ -521,6 +559,28 @@ function callCard(c, wide){
     <div class="thumb ${has?"":"empty"}" ${bg}><span class="num">${String(c.n).padStart(2,"0")}</span>${has?`<span class="play">${I.play}</span>`:`${logo(34)}<span class="pill soon">${c.call_date>=TODAY?"ao vivo "+br(c.call_date):"gravação em breve"}</span>`}</div>
     <div class="info"><div class="ti">${esc(c.title)}</div><div class="mt"><span>${esc(c.presenter||"Nova Safra")}</span><span>${br(c.call_date)}</span></div></div></button>`;
 }
+function pactForm(first){
+  return `<form id="pactForm">
+    ${HABITS.map(h=>{const p=S.pact[h.k]||{}, ex=PACT_EX[h.k];return `<div class="card pk">
+      <span class="em">${h.em}</span>
+      <div><div class="nm">${h.t}</div>
+      <label for="pa_${h.k}">Meu hábito diário</label>
+      <input class="inp" id="pa_${h.k}" name="a_${h.k}" required minlength="2" maxlength="140" value="${esc(p.activity||"")}" placeholder="Ex.: ${esc(ex[0])}">
+      <label for="pg_${h.k}">Resultado que quero até 31/12 <span style="color:var(--mut2)">(opcional)</span></label>
+      <input class="inp sm" id="pg_${h.k}" name="g_${h.k}" maxlength="200" value="${esc(p.goal||"")}" placeholder="Ex.: ${esc(ex[1])}"></div>
+    </div>`}).join("")}
+    <button class="btn" type="submit">${first?"Firmar meu pacto":"Salvar meu pacto"}</button>
+    <p class="note">${first?"Você pode ajustar depois em “Meu Pacto”.":"Mudou de fase? Ajuste o hábito, mas seu pacto do primeiro dia fica guardado."}</p>
+  </form>`;
+}
+function pactHead(first){
+  return `<div class="head">${first?logo(52):""}
+    <div class="mono">${first?"Antes de começar":"Meu Pacto da Safra"}</div>
+    <h1 style="margin-top:10px">${first?`Seu <span class="serif">Pacto</span> da Safra`:"Seus 5 hábitos"}</h1>
+    <p>Escolha <b style="color:var(--fg)">uma atividade-chave por área</b> que você vai fazer <b style="color:var(--fg)">todo dia até 31/12</b> para terminar 2026 com um resultado totalmente diferente. É o seu desafio, do seu jeito.</p></div>`;
+}
+function pagePactoFull(){ return `<div class="pacto-full"><div class="pacto">${pactHead(true)}${pactForm(true)}</div></div>`; }
+function pagePacto(){ return shell(`<div class="pacto" style="margin:0">${pactHead(false)}${pactForm(false)}</div>`); }
 function pageCalls(){
   return shell(`<h1>Calls da Safra</h1><p class="sub">Toda semana ao vivo. A gravação fica aqui para quem não conseguiu ir.</p>
   <section class="sec calls">${S.calls.map(c=>callCard(c)).join("")}</section>`);
@@ -567,10 +627,11 @@ function pageLogin(state={}){
 }
 
 /* ---------- render ---------- */
-const PAGES = { inicio:pageInicio, fechamento:pageFechamento, calls:pageCalls, semeadores:pageSemeadores, beneficios:pageBeneficios };
+const PAGES = { pacto:pagePacto, inicio:pageInicio, fechamento:pageFechamento, calls:pageCalls, semeadores:pageSemeadores, beneficios:pageBeneficios };
 function sortRank(){ S.rank.sort((a,b)=>b.total-a.total||b.streak-a.streak||a.name.localeCompare(b.name)); }
 function render(){
   if (!S.me) return;
+  if (!pactDone()) { $("#root").innerHTML = pagePactoFull(); window.scrollTo({top:0}); return; }
   const p = PAGES[route()] || pageInicio;
   $("#root").innerHTML = p();
   window.scrollTo({top:0});
@@ -618,6 +679,17 @@ document.addEventListener("submit", async e => {
     try { await DB.login(email); $("#msg").className="msg ok"; $("#msg").textContent = "Pronto! Abra o link que mandamos para "+email+"."; }
     catch(err){ $("#msg").className="msg err"; $("#msg").textContent = "Não deu para enviar. Confira o e-mail e tente de novo."; b.disabled=false; console.error(err); }
   }
+  if (e.target.id === "pactForm") {
+    const f = new FormData(e.target), wasDone = pactDone(), pact = {};
+    for (const h of HABITS) pact[h.k] = { activity:String(f.get("a_"+h.k)||"").trim(), goal:String(f.get("g_"+h.k)||"").trim() };
+    if (HABITS.some(h => pact[h.k].activity.length < 2)) { toast("Preencha um hábito para cada área."); return; }
+    const b = e.target.querySelector("button[type=submit]"); b.disabled = true;
+    try { await DB.savePact(S.me, pact); S.pact = pact; }
+    catch(err){ b.disabled = false; toast("Não salvou. Tenta de novo."); console.error(err); return; }
+    toast(wasDone ? "Pacto atualizado 🌱" : "Pacto firmado 🌱");
+    if (route() === "inicio") render(); else location.hash = "#/inicio";
+    return;
+  }
   if (e.target.id === "nameForm") {
     const name = $("#nm").value.trim(); if (!name) return;
     const me = S.me || { id:"me" };
@@ -627,7 +699,7 @@ document.addEventListener("submit", async e => {
 });
 
 async function load(){
-  [S.checks, S.calls] = await Promise.all([DB.myChecks(S.me), DB.calls()]);
+  [S.checks, S.calls, S.pact] = await Promise.all([DB.myChecks(S.me), DB.calls(), DB.pact(S.me)]);
   S.rank = await DB.ranking(S.me, S.checks); sortRank();
 }
 
