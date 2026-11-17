@@ -242,6 +242,9 @@ h2 .ic{color:var(--g);width:20px;height:20px}
 .login h1 b{font-weight:800;letter-spacing:-.04em}
 .login form{margin-top:30px;display:flex;flex-direction:column;gap:12px;text-align:left}
 .login label{font-size:13px;color:var(--mut)}
+.login .hint{font-size:12.5px;color:var(--mut2);line-height:1.45;margin-top:-4px}
+.mailnote{margin-top:26px;text-align:left;font-size:13.5px;line-height:1.5;color:#d6d6d1;padding:12px 14px;border-radius:12px;border:1px solid rgba(34,224,122,.35);background:rgba(34,224,122,.07)}
+.mailnote b{color:var(--fg);word-break:break-all}
 .inp{width:100%;padding:15px 16px;border-radius:13px;border:1px solid var(--line2);background:rgba(255,255,255,.04);color:var(--fg);font:inherit;font-size:16px;outline:none}
 .inp:focus{border-color:var(--g);box-shadow:0 0 0 3px rgba(34,224,122,.18)}
 .login .btn{width:100%;padding:16px;margin-top:4px}
@@ -687,11 +690,12 @@ function pageLogin(state={}){
     <h1><span class="serif">Nova</span><b>Safra</b></h1>
     <p class="sub">Área do Semeador</p>
     ${state.needName ? `
+    <div class="mailnote">Você entrou com <b>${esc(S.me?.email||"")}</b>.<br>Use <b>sempre esse e-mail</b> para entrar, no computador e no celular. Outro e-mail cria outra conta e seus pontos não vão junto.</div>
     <form id="nameForm"><label for="nm">Como a turma vai te chamar?</label><input class="inp" id="nm" required maxlength="40" placeholder="Seu nome" autocomplete="name"><button class="btn" type="submit">Entrar na turma</button></form>`
     : DEMO ? `
     <form id="nameForm"><label for="nm">Seu nome (modo demonstração)</label><input class="inp" id="nm" required maxlength="40" placeholder="Seu nome" autocomplete="name"><button class="btn" type="submit">Ver a área</button></form>`
     : `
-    <form id="loginForm"><label for="em">E-mail usado na compra</label><input class="inp" id="em" type="email" required placeholder="voce@email.com" autocomplete="email"><button class="btn" type="submit">Receber link de acesso</button></form>`}
+    <form id="loginForm"><label for="em">E-mail usado na compra</label><input class="inp" id="em" type="email" required placeholder="voce@email.com" autocomplete="email"><small class="hint">Use o mesmo e-mail da compra e sempre o mesmo, no computador e no celular. Confira se o celular não preencheu outro.</small><button class="btn" type="submit">Receber link de acesso</button></form>`}
     <p class="msg ${state.cls||""}" id="msg">${esc(state.msg||"")}</p>
   </div></div>`;
 }
@@ -746,8 +750,15 @@ document.addEventListener("submit", async e => {
   e.preventDefault();
   if (e.target.id === "loginForm") {
     const email = $("#em").value.trim().toLowerCase(); const b = e.target.querySelector("button"); b.disabled = true;
-    try { await DB.login(email); $("#msg").className="msg ok"; $("#msg").textContent = "Pronto! Abra o link que mandamos para "+email+"."; }
-    catch(err){ $("#msg").className="msg err"; $("#msg").textContent = "Não deu para enviar. Confira o e-mail e tente de novo."; b.disabled=false; console.error(err); }
+    try { await DB.login(email); $("#msg").className="msg ok"; $("#msg").textContent = "Pronto! Mandamos o link para "+email+". Abra o e-mail e toque no link (pode cair no spam ou em Promoções)."; }
+    catch(err){
+      const t = String(err?.message||"") + " " + (err?.code||"");
+      $("#msg").className="msg err";
+      $("#msg").textContent = /nao_liberado|Database error|signups? not allowed|unexpected_failure/i.test(t)
+        ? "O e-mail "+email+" não está na turma. Use o mesmo e-mail da compra (Cakto ou Kiwify). Se comprou e não entra, chama a gente no grupo."
+        : (err?.status===429 || /rate limit|seconds/i.test(t)) ? "Muitas tentativas seguidas. Espere 1 minuto e tente de novo."
+        : "Não deu para enviar. Confira o e-mail e tente de novo.";
+      b.disabled=false; console.error(err); }
   }
   if (e.target.id === "pactForm") {
     const f = new FormData(e.target), wasDone = pactDone(), pact = {};
