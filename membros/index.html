@@ -153,6 +153,25 @@ h2 .ic{color:var(--g);width:20px;height:20px}
 .grupo .gt small{display:block;color:var(--mut);font-size:13.5px}
 .grupo .btn{flex:none;padding:11px 18px;font-size:14px}
 @media (max-width:760px){.grupo{flex-wrap:wrap}.grupo .btn{width:100%}}
+/* título */
+.titulo{margin-top:18px;display:flex;align-items:center;gap:18px}
+.titulo .tic{width:52px;height:52px;border-radius:14px;display:grid;place-items:center;flex:none;background:var(--gbg);border:1px solid rgba(34,224,122,.4);color:var(--g);font:700 15px var(--f-mono)}
+.titulo .tb{flex:1;min-width:0}
+.titulo .tn{font-size:21px;font-weight:700;letter-spacing:-.02em;line-height:1.2}
+.titulo .tn .serif{font-size:23px;color:var(--g)}
+.titulo .tx{font-size:13.5px;color:var(--mut);margin-top:2px}
+.titulo .bar{margin-top:10px}
+.trail{display:flex;gap:6px;margin-top:12px;flex-wrap:wrap}
+.trail span{font-size:11.5px;padding:3px 9px;border-radius:99px;border:1px solid var(--line);color:var(--mut2)}
+.trail span.done{color:var(--g);border-color:rgba(34,224,122,.35)}
+.trail span.cur{color:#04140A;background:var(--g);border-color:var(--g);font-weight:600}
+.lvup{position:fixed;inset:0;z-index:60;display:grid;place-items:center;background:rgba(0,0,0,.78);backdrop-filter:blur(6px);padding:20px;animation:fin .25s ease}
+.lvup .box{width:min(380px,100%);text-align:center;padding:34px 24px;border-radius:22px;background:radial-gradient(ellipse at 50% 0%,rgba(34,224,122,.22),transparent 70%),var(--bg2);border:1px solid rgba(34,224,122,.45)}
+.lvup .mono{color:var(--g)}
+.lvup h3{font-size:30px;font-weight:700;letter-spacing:-.03em;margin:10px 0 6px}
+.lvup p{color:var(--mut);font-size:14.5px;margin-bottom:22px}
+@keyframes fin{from{opacity:0}to{opacity:1}}
+@media (max-width:760px){.titulo{gap:14px}.titulo .tic{width:44px;height:44px;font-size:13px}.titulo .tn{font-size:18px}.titulo .tn .serif{font-size:20px}}
 
 /* modal */
 .modal{position:fixed;inset:0;background:rgba(0,0,0,.82);backdrop-filter:blur(6px);display:grid;place-items:center;padding:20px;z-index:50}
@@ -346,6 +365,23 @@ function score(checks){
   return { total, today, streak, perDay };
 }
 
+/* ---------- títulos (por pontos: 1 por hábito marcado) ---------- */
+const TITLES = [
+  {n:"Semeador",        min:0,   f:"Você plantou a primeira semente. Agora é constância."},
+  {n:"Lavrador",        min:25,  f:"Uma semana de terra mexida. Já não é só vontade."},
+  {n:"Cultivador",      min:70,  f:"Você cuida do que plantou todo dia. Poucos chegam aqui."},
+  {n:"Ceifeiro",        min:125, f:"Já dá para ver a colheita. Não solta agora."},
+  {n:"Mestre da Safra", min:180, f:"Você fez a Safra de verdade. 2027 começa diferente."}
+];
+const titleIdx = pts => { let i=0; TITLES.forEach((t,k)=>{ if (pts>=t.min) i=k; }); return i; };
+const titleOf = pts => TITLES[titleIdx(pts)].n;
+function showLevelUp(i){
+  document.querySelector(".lvup")?.remove();
+  const t = TITLES[i], m = document.createElement("div"); m.className="lvup";
+  m.innerHTML = `<div class="box">${logo(48)}<div class="mono" style="margin-top:16px">Novo título</div><h3>${t.n}</h3><p>${t.f}</p><button class="btn" data-close-lv>Seguir plantando</button></div>`;
+  document.body.appendChild(m);
+}
+
 /* ---------- estado ---------- */
 const S = { me:null, checks:new Set(), rank:[], calls:[], editDay:TODAY };
 const toast = m => { const t=$("#toast"); t.textContent=m; t.classList.add("on"); clearTimeout(t._h); t._h=setTimeout(()=>t.classList.remove("on"),2200); };
@@ -362,7 +398,7 @@ const route = () => (location.hash.replace("#/","") || "inicio");
 
 function shell(inner){
   const r = route(); const sc = score(S.checks);
-  const lv = sc.streak >= 21 ? "Colheita" : sc.streak >= 7 ? "Broto forte" : sc.streak >= 1 ? "Broto" : "Semente";
+  const lv = titleOf(sc.total);
   return `<div class="app">
   <aside class="side">
     <div class="brand">${logo(30)}<div><span class="serif">Nova</span><b>Safra</b></div></div>
@@ -384,6 +420,7 @@ function shell(inner){
 
 const greet = () => { const h = +new Intl.DateTimeFormat("pt-BR",{hour:"numeric",hour12:false,timeZone:"America/Sao_Paulo"}).format(new Date()); return h<12?"Bom dia":h<18?"Boa tarde":"Boa noite"; };
 const dias = n => n===1?"1 dia":n+" dias";
+const seguidos = n => n===1?"1 dia seguido":n+" dias seguidos";
 const first = n => (n||"").split(" ")[0];
 
 function habitsBlock(day){
@@ -394,6 +431,18 @@ function habitsBlock(day){
   ${!inRange(day)?`<p class="sub" style="margin-top:14px">A Safra roda de ${br(C.INICIO)} a ${br(C.FIM)}. As marcações abrem no primeiro dia.</p>`:""}`;
 }
 
+function titleCard(pts){
+  const i = titleIdx(pts), t = TITLES[i], nx = TITLES[i+1];
+  const pct = nx ? ((pts-t.min)/(nx.min-t.min)*100) : 100;
+  const falta = nx ? nx.min-pts : 0;
+  return `<div class="card titulo-card" style="margin-top:22px">
+    <div class="titulo" style="margin-top:0"><span class="tic">${String(i+1).padStart(2,"0")}</span>
+      <div class="tb"><div class="mono" style="font-size:10.5px">Seu título</div><div class="tn">${t.n}</div>
+      <div class="tx">${nx ? `Faltam <b style="color:var(--fg)">${falta} ${falta===1?"ponto":"pontos"}</b> para <b style="color:var(--g)">${nx.n}</b>` : "Título máximo da Safra. Você chegou."}</div>
+      <div class="bar"><i style="width:${Math.min(100,pct).toFixed(1)}%"></i></div></div></div>
+    <div class="trail">${TITLES.map((x,k)=>`<span class="${k<i?"done":k===i?"cur":""}">${x.n}</span>`).join("")}</div>
+  </div>`;
+}
 function pageInicio(){
   const sc = score(S.checks); const nToday = sc.perDay[TODAY]||0;
   const closedToday = S.rank.filter(r=>r.today>0);
@@ -403,6 +452,7 @@ function pageInicio(){
   <h1>${greet()}, ${esc(first(S.me.name))}</h1>
   <p class="sub">Dia ${curDay} de ${DAYS.length} da Safra. ${dias(DAYS.length-curDay+1)} para 2027.</p>
   <div class="bar" style="max-width:420px"><i style="width:${(curDay/DAYS.length*100).toFixed(1)}%"></i></div>
+  ${titleCard(sc.total)}
 
   <a class="card grupo" href="${esc(C.WHATSAPP)}" target="_blank" rel="noopener">
     <span class="gi"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20l1.3-3.8A8 8 0 1 1 8 19z"/></svg></span>
@@ -446,7 +496,7 @@ function pageFechamento(){
   <section class="sec">
     <div class="daybar">
       <div class="daysw"><button data-day-sel="${TODAY}" class="${d===TODAY?"on":""}">Hoje · ${br(TODAY)}</button><button data-day-sel="${YESTERDAY}" class="${d===YESTERDAY?"on":""}">Ontem · ${br(YESTERDAY)}</button></div>
-      <span class="pill g"><span class="dot"></span>${dias(sc.streak)} seguidos</span>
+      <span class="pill g"><span class="dot"></span>${seguidos(sc.streak)}</span>
     </div>
     ${habitsBlock(d)}
   </section>
@@ -478,13 +528,13 @@ function pageCalls(){
 
 function rowHTML(r,i){
   const mine = r.id===S.me.id || r.id==="me";
-  return `<div class="row ${mine?"me-row":""}"><span class="pos ${i<3?"top":""}">#${i+1}</span>${avatar(r.name)}<span class="n">${esc(r.name)}${mine?" (você)":""}<small>${dias(r.streak)} seguidos</small></span><span class="mini5">${[0,1,2,3,4].map(k=>`<i class="${k<r.today?"on":""}"></i>`).join("")}</span><span class="s"><b>${r.total}</b> pts</span></div>`;
+  return `<div class="row ${mine?"me-row":""}"><span class="pos ${i<3?"top":""}">#${i+1}</span>${avatar(r.name)}<span class="n">${esc(r.name)}${mine?" (você)":""}<small><span style="color:var(--g)">${titleOf(r.total)}</span> · ${seguidos(r.streak)}</small></span><span class="mini5">${[0,1,2,3,4].map(k=>`<i class="${k<r.today?"on":""}"></i>`).join("")}</span><span class="s"><b>${r.total}</b> pts</span></div>`;
 }
 function pageSemeadores(){
   const top = S.rank.slice(0,3); const order=[1,0,2];
-  return shell(`<h1>Semeadores</h1><p class="sub">Cada hábito marcado vale 1 ponto. As barrinhas mostram o fechamento de hoje.</p>
+  return shell(`<h1>Semeadores</h1><p class="sub">Cada hábito marcado vale 1 ponto. Os pontos sobem seu título: ${TITLES.map(t=>t.n+" ("+t.min+")").join(" → ")}.</p>
   <section class="sec">
-    ${top.length>=3?`<div class="podium">${order.map(i=>{const r=top[i];return `<div class="card pod p${i+1}"><span class="medal">#${i+1}</span>${avatar(r.name)}<b>${esc(first(r.name))}</b><span>${r.total} pts · ${r.streak}d</span></div>`}).join("")}</div>`:""}
+    ${top.length>=3?`<div class="podium">${order.map(i=>{const r=top[i];return `<div class="card pod p${i+1}"><span class="medal">#${i+1}</span>${avatar(r.name)}<b>${esc(first(r.name))}</b><span style="display:block;color:var(--g);font-size:12.5px">${titleOf(r.total)}</span><span>${r.total} pts · ${r.streak}d</span></div>`}).join("")}</div>`:""}
     <div class="rank">${S.rank.map((r,i)=>rowHTML(r,i)).join("")}</div>
   </section>`);
 }
@@ -534,9 +584,12 @@ document.addEventListener("click", async e => {
   const hb = e.target.closest("[data-hb]");
   if (hb && !hb.disabled) {
     const day = hb.dataset.day, h = hb.dataset.hb, k = day+"|"+h, on = !S.checks.has(k);
+    const lvBefore = titleIdx(score(S.checks).total);
     on ? S.checks.add(k) : S.checks.delete(k); refreshMine();
     const y = window.scrollY; $("#root").innerHTML = (PAGES[route()]||pageInicio)(); window.scrollTo(0,y);
-    if (on && HABITS.every(x=>S.checks.has(day+"|"+x.k))) toast("Dia fechado. 5 de 5 🌱");
+    const lvAfter = titleIdx(score(S.checks).total);
+    if (on && lvAfter > lvBefore) showLevelUp(lvAfter);
+    else if (on && HABITS.every(x=>S.checks.has(day+"|"+x.k))) toast("Dia fechado. 5 de 5 🌱");
     try { await DB.toggle(S.me, day, h, on); }
     catch(err){ on ? S.checks.delete(k) : S.checks.add(k); refreshMine(); render(); toast("Não salvou. Tenta de novo."); console.error(err); }
     return;
@@ -547,9 +600,10 @@ document.addEventListener("click", async e => {
   if (cl) { openVideo(cl.dataset.call, cl.dataset.title); return; }
   const act = e.target.closest("[data-act]");
   if (act?.dataset.act === "logout") { await DB.logout(); location.hash=""; location.reload(); }
+  if (e.target.closest("[data-close-lv]") || e.target.classList.contains("lvup")) document.querySelector(".lvup")?.remove();
   if (e.target.closest("[data-close]") || e.target.classList.contains("modal")) document.querySelector(".modal")?.remove();
 });
-document.addEventListener("keydown", e => { if (e.key==="Escape") document.querySelector(".modal")?.remove(); });
+document.addEventListener("keydown", e => { if (e.key==="Escape") { document.querySelector(".modal")?.remove(); document.querySelector(".lvup")?.remove(); } });
 
 function openVideo(id, title){
   const m = document.createElement("div"); m.className="modal";
