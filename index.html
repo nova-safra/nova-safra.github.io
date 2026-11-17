@@ -431,6 +431,11 @@ svg.mark rect{transform-box:fill-box;transform-origin:center;animation:px .5s cu
   .n1{top:40px}.n2{top:140px}.n3{top:240px}
 }
 @media (prefers-reduced-motion:reduce){.node,.radar i,.net-fan path.flow,.net-lines path.flow{animation:none}.radar i{opacity:.25}}
+/* Botões de compra em verde, combinando com o broto */
+.offer a.cta[data-checkout],.last-call a.cta[data-checkout]{background:linear-gradient(180deg,#3BF08E,#16C566);color:#04140A;box-shadow:0 0 0 6px rgba(34,224,122,.10),0 0 28px rgba(34,224,122,.35),0 20px 50px -20px rgba(34,224,122,.55)}
+.offer a.cta[data-checkout]:hover,.last-call a.cta[data-checkout]:hover{background:linear-gradient(180deg,#5CF5A3,#1BD472)}
+.offer a.cta[data-checkout]:focus-visible,.last-call a.cta[data-checkout]:focus-visible{outline:2px solid #22E07A}
+.offer a.cta[data-checkout]::after,.last-call a.cta[data-checkout]::after{background:linear-gradient(110deg,transparent 35%,rgba(255,255,255,.45) 50%,transparent 65%)!important}
 </style>
 
 <!-- TOPO -->
