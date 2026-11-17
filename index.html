@@ -63,6 +63,21 @@ a{color:inherit}
 .brand{display:flex;align-items:center;gap:10px;font-weight:600;letter-spacing:-.02em}
 .brand svg{width:26px;height:26px}
 .nav .label::before{content:none}
+.vsl{aspect-ratio:16/9;width:100%;border-radius:var(--r-lg);border:1px solid var(--line-2);background:#0e0f11;position:relative;overflow:hidden;box-shadow:0 30px 80px -30px rgba(0,0,0,.8),0 0 0 6px rgba(255,255,255,.03)}
+.vsl video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block}
+.vsl-unmute{position:absolute;inset:0;z-index:2;display:grid;place-items:center;background:rgba(8,9,10,.28);border:0;cursor:pointer;padding:0;color:inherit;font:inherit}
+.vsl-unmute .pill{display:flex;flex-direction:column;align-items:center;gap:10px;background:var(--fg);color:var(--ink);border-radius:22px;padding:18px 26px;box-shadow:0 0 0 10px rgba(245,245,243,.12),0 20px 50px rgba(0,0,0,.5);animation:vslpulse 2s ease-in-out infinite}
+.vsl-unmute .pill svg{width:34px;height:34px}
+.vsl-unmute b{font:700 16px var(--f-sans);letter-spacing:-.01em}
+.vsl-unmute small{font:500 11px var(--f-mono);letter-spacing:.12em;text-transform:uppercase;color:var(--ink-muted)}
+@keyframes vslpulse{50%{box-shadow:0 0 0 18px rgba(245,245,243,.06),0 20px 50px rgba(0,0,0,.5)}}
+.vsl-bar{position:absolute;right:12px;bottom:12px;z-index:3;display:flex;gap:8px}
+.vsl-bar button{display:inline-flex;align-items:center;gap:7px;height:38px;padding:0 13px;border-radius:999px;border:1px solid rgba(255,255,255,.22);background:rgba(8,9,10,.7);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);color:var(--fg);font:500 12px var(--f-mono);cursor:pointer}
+.vsl-bar button svg{width:16px;height:16px}
+.vsl-bar button:hover{background:rgba(30,31,34,.85)}
+.vsl.on .vsl-unmute{display:none}
+@media (max-width:640px){.vsl{border-radius:var(--r-md)}.vsl-unmute .pill{padding:12px 18px;gap:6px}.vsl-unmute .pill svg{width:26px;height:26px}.vsl-unmute b{font-size:14px}.vsl-bar button{height:34px;padding:0 11px}.vsl-bar .t{display:none}}
+@media (prefers-reduced-motion:reduce){.vsl-unmute .pill{animation:none}}
 .video{aspect-ratio:16/9;width:100%;max-width:100%;border-radius:var(--r-lg);border:1px solid var(--line-2);
   background:radial-gradient(120% 90% at 50% 0%, #1d1f23 0%, #0e0f11 70%);display:grid;place-items:center;position:relative;overflow:hidden}
 .video::after{content:"";position:absolute;inset:0;background-image:linear-gradient(var(--line) 1px,transparent 1px),linear-gradient(90deg,var(--line) 1px,transparent 1px);background-size:44px 44px;opacity:.5;-webkit-mask-image:linear-gradient(#000,transparent);mask-image:linear-gradient(#000,transparent)}
@@ -426,7 +441,14 @@ svg.mark rect{transform-box:fill-box;transform-origin:center;animation:px .5s cu
       <span class="label">turma_2027</span>
     </div>
     <span class="status"><span class="dot"></span><span>Faltam <b id="sDays" style="color:var(--fg)">45</b> dias para 2027</span></span>
-    <!-- VSL entra aqui quando aprovada -->
+    <div class="vsl" id="vslBox">
+      <video id="vsl" autoplay muted loop playsinline preload="auto" poster="vsl-poster.jpg"><source src="vsl.mp4" type="video/mp4"></video>
+      <button class="vsl-unmute" id="vslUnmute" type="button" aria-label="Ativar o som e assistir do começo"><span class="pill"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 5 6 9H2v6h4l5 4V5z"/><path d="m23 9-6 6M17 9l6 6"/></svg><b>Clique para ativar o som</b><small>o vídeo volta do começo</small></span></button>
+      <div class="vsl-bar">
+        <button type="button" id="vslSound" aria-label="Ativar som"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 5 6 9H2v6h4l5 4V5z"/><path d="m23 9-6 6M17 9l6 6"/></svg></span><span class="t">ativar som</span></button>
+        <button type="button" id="vslRestart" aria-label="Voltar ao começo"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 3-6.7L3 8"/><path d="M3 3v5h5"/></svg><span class="t">do começo</span></button>
+      </div>
+    </div>
     <h1><span class="serif">Nova Safra</span><span class="sans">Comece 2027 diferente</span></h1>
     <p class="promise">O ano está acabando. Ou você chega em janeiro <b>igual chegou nos outros anos</b>, prometendo que agora vai, ou usa os últimos 45 dias de 2026 pra chegar com os hábitos já rodando e a <b>IA trabalhando a seu favor</b>. Quem entra vira <b>semeador</b>, e a gente faz junto, ao vivo, todo dia.</p>
     <div class="stats">
@@ -764,4 +786,17 @@ svg.mark rect{transform-box:fill-box;transform-origin:center;animation:px .5s cu
 })();
 </script>
 
+<script>
+(function(){
+  const box=document.getElementById("vslBox"), v=document.getElementById("vsl"); if(!v) return;
+  const snd=document.getElementById("vslSound"), ICON_OFF=snd.querySelector(".ic").innerHTML,
+    ICON_ON='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 5 6 9H2v6h4l5 4V5z"/><path d="M15.5 8.5a5 5 0 0 1 0 7M19 5a10 10 0 0 1 0 14"/></svg>';
+  function sync(){snd.querySelector(".ic").innerHTML=v.muted?ICON_OFF:ICON_ON;snd.querySelector(".t").textContent=v.muted?"ativar som":"sem som";snd.setAttribute("aria-label",v.muted?"Ativar som":"Desativar som");}
+  function fromStart(){v.currentTime=0;v.muted=false;box.classList.add("on");v.play().catch(()=>{});sync();}
+  document.getElementById("vslUnmute").addEventListener("click",fromStart);
+  document.getElementById("vslRestart").addEventListener("click",()=>{v.currentTime=0;v.play().catch(()=>{});});
+  snd.addEventListener("click",()=>{if(!box.classList.contains("on")){fromStart();return;}v.muted=!v.muted;if(!v.muted)v.play().catch(()=>{});sync();});
+  v.play().catch(()=>{});
+})();
+</script>
 </html>
