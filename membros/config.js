@@ -6,6 +6,6 @@ window.SAFRA_CONFIG = {
   SUPABASE_ANON_KEY: "sb_publishable_TqCc3UUi5xzLenPt26XDiw_mEUFYHz4",  // chave "anon public" do projeto (pode ficar pública)
   INICIO: "2026-11-17",
   FIM: "2026-12-31",
-  WHATSAPP: "https://chat.whatsapp.com/IOsc03Etp5T6oOukdZLILY",
+  WHATSAPP: "https://chat.whatsapp.com/CFC4TEXHvu66G20eRs1g5d",
   SKILL_URL: ""           // link de download da Skill de Motion
 };
