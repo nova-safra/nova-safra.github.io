@@ -489,6 +489,8 @@ svg.mark rect{transform-box:fill-box;transform-origin:center;animation:px .5s cu
 @keyframes painDot{0%,30%,100%{background:#fff;color:var(--ink-muted);border-color:var(--ink-line)}8%,20%{background:#16C566;color:#04140A;border-color:#16C566}}
 @keyframes painSweep{0%{transform:translateX(-110%)}22%,100%{transform:translateX(110%)}}
 @media (prefers-reduced-motion:reduce){.pain .card,.pain .card .ix,.pain .card::before{animation:none}}
+.pain-close{margin:18px 0 0;max-width:640px;font-size:18px;line-height:1.4;color:var(--ink-muted)}
+.pain-close b{color:var(--ink);font-weight:700}
 </style>
 
 <!-- TOPO -->
@@ -546,11 +548,12 @@ svg.mark rect{transform-box:fill-box;transform-origin:center;animation:px .5s cu
     <span class="label">pra_quem_é</span>
     <h2 class="h2">Você se reconhece <span class="s">aqui?</span></h2>
     <div class="cards pain">
-      <div class="card"><span class="ix">01</span><p>Todo fim de ano promete que agora vai. Em fevereiro já largou tudo.</p></div>
-      <div class="card"><span class="ix">02</span><p>Tem ideia de produto na cabeça faz tempo, mas sozinho não sai do papel.</p></div>
-      <div class="card"><span class="ix">03</span><p>Sabe que precisa treinar, ler e se organizar. Começa animado e para na primeira semana.</p></div>
-      <div class="card"><span class="ix">04</span><p>Quer usar a IA pra ganhar dinheiro e ter uma turma do lado puxando junto. Não mais um curso parado.</p></div>
+      <div class="card"><span class="ix">01</span><p>Todo fim de ano promete que agora vai. Começa animado e larga na primeira semana.</p></div>
+      <div class="card"><span class="ix">02</span><p>Terminou 2026 ganhando o mesmo que no começo do ano.</p></div>
+      <div class="card"><span class="ix">03</span><p>Tem ideia de produto na cabeça faz tempo, mas sozinho não sai do papel.</p></div>
+      <div class="card"><span class="ix">04</span><p>Tá cercado de gente que não quer crescer. Ninguém do seu lado puxa você pra cima.</p></div>
     </div>
+    <p class="pain-close">Se você marcou pelo menos um, o problema não é você. <b>É tentar sozinho.</b></p>
   </div>
 </section>
 
