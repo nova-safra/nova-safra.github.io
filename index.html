@@ -453,7 +453,7 @@ svg.mark rect{transform-box:fill-box;transform-origin:center;animation:px .5s cu
 .offer a.cta[data-checkout]:focus-visible,.last-call a.cta[data-checkout]:focus-visible{outline:2px solid #22E07A}
 .offer a.cta[data-checkout]::after,.last-call a.cta[data-checkout]::after{background:linear-gradient(110deg,transparent 35%,rgba(255,255,255,.45) 50%,transparent 65%)!important}
 .split.solo{grid-template-columns:minmax(0,440px);justify-content:center}
-.top-cta{display:flex;flex-direction:column;align-items:center;gap:10px;margin:22px auto 6px;width:100%;max-width:420px}
+.top-cta{display:flex;flex-direction:column;align-items:center;gap:10px;margin:0 auto 6px;width:100%;max-width:420px}
 .top-cta .cta{width:100%;background:linear-gradient(180deg,#3BF08E,#16C566);color:#04140A;box-shadow:0 0 0 6px rgba(34,224,122,.10),0 0 28px rgba(34,224,122,.35)}
 .top-cta .cta:hover{background:linear-gradient(180deg,#5CF5A3,#1BD472)}
 .top-cta .cta::after{background:linear-gradient(110deg,transparent 35%,rgba(255,255,255,.45) 50%,transparent 65%)!important}
@@ -462,6 +462,16 @@ svg.mark rect{transform-box:fill-box;transform-origin:center;animation:px .5s cu
 .sticky-cta.on{transform:none}
 .sticky-cta a{display:flex;justify-content:center;align-items:center;gap:8px;text-decoration:none;font-weight:700;font-size:16px;padding:15px;border-radius:999px;background:linear-gradient(180deg,#3BF08E,#16C566);color:#04140A}
 @media (min-width:769px){.sticky-cta{display:none}}
+.top h1.hl{display:block;font-family:var(--f-sans);font-weight:700;font-size:clamp(32px,6.4vw,54px);line-height:1.06;letter-spacing:-.035em;max-width:18ch}
+.top h1.hl .g{color:#3BF08E;text-shadow:0 0 30px rgba(34,224,122,.35)}
+.hero-price{display:flex;flex-direction:column;align-items:center;gap:6px;margin-top:4px}
+.hp-anchor{margin:0;max-width:32ch;color:var(--soft);font-size:16px;line-height:1.4}
+.hp-val{margin:0;display:flex;align-items:flex-start;font-family:var(--f-sans);font-weight:800;font-size:clamp(72px,16vw,104px);line-height:1;letter-spacing:-.05em;color:#fff;text-shadow:0 0 40px rgba(255,255,255,.3)}
+.hp-val .cur{font-size:.32em;margin:.32em .12em 0 0;letter-spacing:0}
+.hp-val .cents{font-size:.32em;margin-top:.32em;letter-spacing:0}
+.hp-just{margin:0;color:var(--muted);font-size:14px}
+.hp-just b{color:var(--fg)}
+@media (max-width:640px){.top .inner{padding-top:24px;gap:18px}.top h1.hl{font-size:30px}.top .promise{font-size:17px}.hp-anchor{font-size:15px}.hp-val{font-size:76px}}
 </style>
 
 <!-- TOPO -->
@@ -473,6 +483,8 @@ svg.mark rect{transform-box:fill-box;transform-origin:center;animation:px .5s cu
       <span class="label">turma_2027</span>
     </div>
     <span class="status"><span class="dot"></span><span>Faltam <b id="sDays" style="color:var(--fg)">45</b> dias para 2027</span></span>
+    <h1 class="hl">Feche 2026 com <span class="g">45 dias de hábitos</span> e comece 2027 diferente</h1>
+    <p class="promise"><b>Sozinho você já tentou.</b> Agora entra numa turma no WhatsApp com <b>call ao vivo toda semana</b> e 5 hábitos por dia: corpo, dinheiro, mente, espírito e network.</p>
     <div class="vsl" id="vslBox">
       <video id="vsl" muted loop playsinline preload="none" poster="vsl-poster.jpg"></video>
       <button class="vsl-unmute" id="vslUnmute" type="button" aria-label="Ativar o som e assistir do começo"><span class="pill"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 5 6 9H2v6h4l5 4V5z"/><path d="m23 9-6 6M17 9l6 6"/></svg><b>Clique para ativar o som</b><small>o vídeo volta do começo</small></span></button>
@@ -481,11 +493,14 @@ svg.mark rect{transform-box:fill-box;transform-origin:center;animation:px .5s cu
         <button type="button" id="vslRestart" aria-label="Voltar ao começo"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 3-6.7L3 8"/><path d="M3 3v5h5"/></svg><span class="t">do começo</span></button>
       </div>
     </div>
-    <h1><span class="serif">Nova Safra</span><span class="sans">Comece 2027 diferente</span></h1>
-    <p class="promise"><b>Sozinho você já tentou.</b> Agora entra numa turma que vai fechar 2026 <b>crescendo junto</b>: network, call ao vivo e <b>gente do seu lado todo dia</b>.</p>
+    <div class="hero-price">
+      <p class="hp-anchor">São 45 dias de turma, 5 calls ao vivo e a Skill de Motion de bônus. Tudo isso por apenas:</p>
+      <p class="hp-val"><span class="cur">R$</span>27<span class="cents">,00</span></p>
+      <p class="hp-just">Menos de <b>R$ 0,60 por dia</b> de turma · taxa única</p>
+    </div>
     <div class="top-cta">
-      <a class="cta" href="https://pay.cakto.com.br/3bteztx_1334333" target="_blank" rel="noopener" data-checkout>Quero ser semeador · R$27 <span class="arr">→</span></a>
-      <small>taxa única · 7 dias de garantia</small>
+      <a class="cta" href="https://pay.cakto.com.br/3bteztx_1334333" target="_blank" rel="noopener" data-checkout>Quero ser semeador <span class="arr">→</span></a>
+      <small>compra segura · 7 dias de garantia</small>
     </div>
     <div class="stats">
       <div class="stat"><b id="cDays">45</b><span>dias para 2027</span></div>
