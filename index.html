@@ -470,6 +470,13 @@ svg.mark rect{transform-box:fill-box;transform-origin:center;animation:px .5s cu
 .hp-val{font-family:var(--f-sans);font-weight:800;font-size:48px;line-height:1;letter-spacing:-.04em;color:#fff}
 .hp-just{text-align:left;color:var(--muted);font-size:13px;line-height:1.35;border-left:1px solid var(--line-2);padding-left:14px}
 @media (max-width:640px){.top .inner{padding-top:24px;gap:18px}.top h1.hl{font-size:30px}.top .promise{font-size:17px}.hp-val{font-size:44px}}
+.members{display:flex;align-items:center;gap:12px;justify-content:center;margin-top:2px}
+.members .avs{display:flex}
+.members .avs span{width:30px;height:30px;border-radius:50%;display:grid;place-items:center;font:700 12px var(--f-sans);color:#04140A;background:linear-gradient(180deg,#3BF08E,#16C566);border:2px solid var(--bg);margin-left:-8px}
+.members .avs span:first-child{margin-left:0}
+.members .avs span:nth-child(2n){background:#F5F5F3}
+.members p{margin:0;text-align:left;font-size:13.5px;line-height:1.35;color:var(--soft)}
+.members p b{color:var(--fg)}
 </style>
 
 <!-- TOPO -->
@@ -499,6 +506,19 @@ svg.mark rect{transform-box:fill-box;transform-origin:center;animation:px .5s cu
       <a class="cta" href="https://pay.cakto.com.br/3bteztx_1334333" target="_blank" rel="noopener" data-checkout>Quero entrar no grupo <span class="arr">→</span></a>
       <small>compra segura · 7 dias de garantia</small>
     </div>
+    <div class="members" id="members" hidden>
+      <div class="avs" id="mAvs"></div>
+      <p><b id="mCount"></b> já estão no grupo<br><span id="mNames"></span></p>
+    </div>
+    <script>
+    /* Prova social: atualize MEMBROS com o número do grupo do WhatsApp */
+    (function(){var MEMBROS=8,NOMES=["Wágner","João","Marcelo","Marcelly"];
+    if(!MEMBROS)return;var b=document.getElementById("members");
+    document.getElementById("mCount").textContent=MEMBROS+" semeadores";
+    document.getElementById("mNames").textContent=NOMES.slice(0,4).join(", ")+" e mais "+Math.max(MEMBROS-4,0);
+    document.getElementById("mAvs").innerHTML=NOMES.slice(0,4).map(function(n){return"<span>"+n[0]+"</span>"}).join("");
+    b.hidden=false;})();
+    </script>
     <div class="stats">
       <div class="stat"><b id="cDays">45</b><span>dias para 2027</span></div>
       <div class="stat"><b>1</b><span>turma, todo dia</span></div>
