@@ -477,6 +477,18 @@ svg.mark rect{transform-box:fill-box;transform-origin:center;animation:px .5s cu
 .members .avs span:nth-child(2n){background:#F5F5F3}
 .members p{margin:0;text-align:left;font-size:13.5px;line-height:1.35;color:var(--soft)}
 .members p b{color:var(--fg)}
+.cards.pain{grid-template-columns:1fr;gap:8px;max-width:640px}
+.pain .card{flex-direction:row;align-items:center;gap:14px;padding:14px 16px;border-radius:14px;position:relative;overflow:hidden;animation:painGlow 8s ease-in-out infinite}
+.pain .card p{font-size:15.5px;line-height:1.4;margin:0}
+.pain .card .ix{flex:none;width:30px;height:30px;border-radius:50%;display:grid;place-items:center;border:1px solid var(--ink-line);background:#fff;font-size:11px;transition:none;animation:painDot 8s ease-in-out infinite}
+.pain .card::before{content:"";position:absolute;inset:0;background:linear-gradient(100deg,transparent 30%,rgba(34,224,122,.14) 50%,transparent 70%);transform:translateX(-110%);animation:painSweep 8s ease-in-out infinite;pointer-events:none}
+.pain .card:nth-child(2),.pain .card:nth-child(2) .ix,.pain .card:nth-child(2)::before{animation-delay:2s}
+.pain .card:nth-child(3),.pain .card:nth-child(3) .ix,.pain .card:nth-child(3)::before{animation-delay:4s}
+.pain .card:nth-child(4),.pain .card:nth-child(4) .ix,.pain .card:nth-child(4)::before{animation-delay:6s}
+@keyframes painGlow{0%,30%,100%{border-color:var(--ink-line)}8%,20%{border-color:rgba(22,197,102,.55)}}
+@keyframes painDot{0%,30%,100%{background:#fff;color:var(--ink-muted);border-color:var(--ink-line)}8%,20%{background:#16C566;color:#04140A;border-color:#16C566}}
+@keyframes painSweep{0%{transform:translateX(-110%)}22%,100%{transform:translateX(110%)}}
+@media (prefers-reduced-motion:reduce){.pain .card,.pain .card .ix,.pain .card::before{animation:none}}
 </style>
 
 <!-- TOPO -->
@@ -533,7 +545,7 @@ svg.mark rect{transform-box:fill-box;transform-origin:center;animation:px .5s cu
   <div class="inner">
     <span class="label">pra_quem_é</span>
     <h2 class="h2">Você se reconhece <span class="s">aqui?</span></h2>
-    <div class="cards">
+    <div class="cards pain">
       <div class="card"><span class="ix">01</span><p>Todo fim de ano promete que agora vai. Em fevereiro já largou tudo.</p></div>
       <div class="card"><span class="ix">02</span><p>Tem ideia de produto na cabeça faz tempo, mas sozinho não sai do papel.</p></div>
       <div class="card"><span class="ix">03</span><p>Sabe que precisa treinar, ler e se organizar. Começa animado e para na primeira semana.</p></div>
