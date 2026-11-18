@@ -465,13 +465,11 @@ svg.mark rect{transform-box:fill-box;transform-origin:center;animation:px .5s cu
 .top h1.hl{display:block;font-family:var(--f-sans);font-weight:700;font-size:clamp(32px,6.4vw,54px);line-height:1.06;letter-spacing:-.035em;max-width:18ch}
 .top h1.hl .g{color:#3BF08E;text-shadow:0 0 30px rgba(34,224,122,.35)}
 .hero-price{display:flex;flex-direction:column;align-items:center;gap:6px;margin-top:4px}
-.hp-anchor{margin:0;max-width:32ch;color:var(--soft);font-size:16px;line-height:1.4}
-.hp-val{margin:0;display:flex;align-items:flex-start;font-family:var(--f-sans);font-weight:800;font-size:clamp(72px,16vw,104px);line-height:1;letter-spacing:-.05em;color:#fff;text-shadow:0 0 40px rgba(255,255,255,.3)}
-.hp-val .cur{font-size:.32em;margin:.32em .12em 0 0;letter-spacing:0}
-.hp-val .cents{font-size:.32em;margin-top:.32em;letter-spacing:0}
-.hp-just{margin:0;color:var(--muted);font-size:14px}
-.hp-just b{color:var(--fg)}
-@media (max-width:640px){.top .inner{padding-top:24px;gap:18px}.top h1.hl{font-size:30px}.top .promise{font-size:17px}.hp-anchor{font-size:15px}.hp-val{font-size:76px}}
+.hp-anchor{margin:0;color:var(--soft);font-size:15px;line-height:1.4}
+.hp-row{display:flex;align-items:center;gap:14px}
+.hp-val{font-family:var(--f-sans);font-weight:800;font-size:48px;line-height:1;letter-spacing:-.04em;color:#fff}
+.hp-just{text-align:left;color:var(--muted);font-size:13px;line-height:1.35;border-left:1px solid var(--line-2);padding-left:14px}
+@media (max-width:640px){.top .inner{padding-top:24px;gap:18px}.top h1.hl{font-size:30px}.top .promise{font-size:17px}.hp-val{font-size:44px}}
 </style>
 
 <!-- TOPO -->
@@ -483,8 +481,8 @@ svg.mark rect{transform-box:fill-box;transform-origin:center;animation:px .5s cu
       <span class="label">turma_2027</span>
     </div>
     <span class="status"><span class="dot"></span><span>Faltam <b id="sDays" style="color:var(--fg)">45</b> dias para 2027</span></span>
-    <h1 class="hl">Em 45 dias, o resultado que você <span class="g">não teve o ano todo</span>. Crescendo junto.</h1>
-    <p class="promise"><b>Sozinho você já tentou.</b> A Nova Safra é uma <b>comunidade de network</b>: a gente faz os hábitos do dia junto, com <b>call ao vivo toda semana</b>.</p>
+    <h1 class="hl">O grupo de WhatsApp pra você <span class="g">fechar 2026 crescendo</span></h1>
+    <p class="promise">Hábitos todo dia com a turma, network e <b>call ao vivo toda semana</b>, até 31/12.</p>
     <div class="vsl" id="vslBox">
       <video id="vsl" muted loop playsinline preload="none" poster="vsl-poster.jpg"></video>
       <button class="vsl-unmute" id="vslUnmute" type="button" aria-label="Ativar o som e assistir do começo"><span class="pill"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 5 6 9H2v6h4l5 4V5z"/><path d="m23 9-6 6M17 9l6 6"/></svg><b>Clique para ativar o som</b><small>o vídeo volta do começo</small></span></button>
@@ -494,12 +492,11 @@ svg.mark rect{transform-box:fill-box;transform-origin:center;animation:px .5s cu
       </div>
     </div>
     <div class="hero-price">
-      <p class="hp-anchor">São 45 dias de turma, 5 calls ao vivo e a Skill de Motion de bônus. Tudo isso por apenas:</p>
-      <p class="hp-val"><span class="cur">R$</span>27<span class="cents">,00</span></p>
-      <p class="hp-just">Menos de <b>R$ 0,60 por dia</b> de turma · taxa única</p>
+      <p class="hp-anchor">45 dias de grupo + 5 calls ao vivo + Skill de Motion de bônus</p>
+      <div class="hp-row"><span class="hp-val">R$27</span><span class="hp-just">taxa única<br>menos de R$0,60 por dia</span></div>
     </div>
     <div class="top-cta">
-      <a class="cta" href="https://pay.cakto.com.br/3bteztx_1334333" target="_blank" rel="noopener" data-checkout>Quero ser semeador <span class="arr">→</span></a>
+      <a class="cta" href="https://pay.cakto.com.br/3bteztx_1334333" target="_blank" rel="noopener" data-checkout>Quero entrar no grupo <span class="arr">→</span></a>
       <small>compra segura · 7 dias de garantia</small>
     </div>
     <div class="stats">
@@ -619,7 +616,7 @@ svg.mark rect{transform-box:fill-box;transform-origin:center;animation:px .5s cu
         <span class="o-bh">bônus de entrada:</span>
         <div class="o-bonus"><span class="gi"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="8" width="18" height="4" rx="1"/><path d="M12 8v13M5 12v9h14v-9M12 8C10 4 7 4 7 6.5S10 8 12 8zm0 0c2-4 5-4 5-1.5S14 8 12 8z"/></svg></span><div><b>Skill de Motion: crie vídeos animados com IA</b><span class="tag">grátis</span></div></div>
       </div>
-      <a class="cta o-cta" href="https://pay.cakto.com.br/3bteztx_1334333" target="_blank" rel="noopener" data-checkout>Quero ser semeador <span class="arr">→</span></a>
+      <a class="cta o-cta" href="https://pay.cakto.com.br/3bteztx_1334333" target="_blank" rel="noopener" data-checkout>Quero entrar no grupo <span class="arr">→</span></a>
       <div class="o-seals"><span>pagamento seguro</span><span>taxa única</span><span>7 dias de garantia</span></div>
       <div class="o-next" id="nextBox"><span>preço único até 31/12</span></div>
     </div>
@@ -677,7 +674,7 @@ svg.mark rect{transform-box:fill-box;transform-origin:center;animation:px .5s cu
       <ul class="lc-list">
         <li>Comunidade fechada</li><li>Call semanal ao vivo</li><li>Skill de Motion grátis</li>
       </ul>
-      <a class="cta inv" href="https://pay.cakto.com.br/3bteztx_1334333" target="_blank" rel="noopener" data-checkout>Quero ser semeador <span class="arr">→</span></a>
+      <a class="cta inv" href="https://pay.cakto.com.br/3bteztx_1334333" target="_blank" rel="noopener" data-checkout>Quero entrar no grupo <span class="arr">→</span></a>
       <div class="lc-seals"><span>taxa única</span><span>sem mensalidade</span><span>7 dias de garantia</span></div>
     </div>
   </div>
@@ -828,7 +825,7 @@ svg.mark rect{transform-box:fill-box;transform-origin:center;animation:px .5s cu
   if(document.readyState==="complete")start();else addEventListener("load",start,{once:true});
 })();
 </script>
-<div class="sticky-cta" id="stickyCta" aria-hidden="true"><a href="https://pay.cakto.com.br/3bteztx_1334333" target="_blank" rel="noopener" data-checkout tabindex="-1">Quero ser semeador · R$27 <span class="arr">→</span></a></div>
+<div class="sticky-cta" id="stickyCta" aria-hidden="true"><a href="https://pay.cakto.com.br/3bteztx_1334333" target="_blank" rel="noopener" data-checkout tabindex="-1">Quero entrar no grupo · R$27 <span class="arr">→</span></a></div>
 <script>
 (function(){var bar=document.getElementById("stickyCta"),top=document.querySelector(".top-cta"),offers=[].slice.call(document.querySelectorAll("#oferta .cta,.last-call .cta"));if(!bar||!top||!("IntersectionObserver" in window))return;
 var vis=new Set();function upd(){var on=!vis.size&&top.getBoundingClientRect().bottom<0;bar.classList.toggle("on",on);bar.setAttribute("aria-hidden",on?"false":"true");bar.firstChild.tabIndex=on?0:-1;}
