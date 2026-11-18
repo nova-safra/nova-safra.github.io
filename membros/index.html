@@ -146,14 +146,6 @@ h2 .ic{color:var(--g);width:20px;height:20px}
 .grupo .gt small{display:block;color:var(--mut);font-size:13.5px}
 .grupo .btn{flex:none;padding:11px 18px;font-size:14px}
 @media (max-width:760px){.grupo{flex-wrap:wrap}.grupo .btn{width:100%}}
-/* apresentação */
-.pacto textarea.inp{min-height:110px;resize:vertical;line-height:1.5;font-family:inherit}
-.pacto .cc{font-size:12px;color:var(--mut2);text-align:right;margin-top:4px}
-.preview{white-space:pre-wrap;text-align:left;font-size:15px;line-height:1.55;padding:18px;border-radius:16px;background:#0f1f15;border:1px solid rgba(34,224,122,.35);color:#e9f7ee}
-.btn.big{display:flex;align-items:center;justify-content:center;gap:10px;width:100%;padding:18px;font-size:17px;margin-top:16px}
-.skip{display:block;margin:16px auto 0;color:var(--mut);font-size:14px;text-decoration:underline}
-.grupo .acts{display:flex;gap:8px;flex-wrap:wrap}
-@media (max-width:760px){.grupo .acts{width:100%}.grupo .acts .btn{flex:1;text-align:center}}
 /* pacto */
 .pacto{width:min(720px,100%);margin:0 auto}
 .pacto-full{min-height:100vh;padding:40px 20px 60px}
@@ -402,23 +394,6 @@ const DB = {
                  : sb.from("habit_checks").delete().match({ user_id:me.id, day, habit });
     const { error } = await q; if (error && error.code !== "23505") throw error;
   },
-  async intro(me){
-    if (DEMO) return LS.get("safra_demo_intro", null);
-    const { data, error } = await sb.from("apresentacoes").select("historia,objetivo").eq("user_id", me.id).maybeSingle();
-    if (error) { if (/PGRST205|42P01|does not exist|schema cache/i.test((error.code||"")+" "+(error.message||""))) return { unsupported:true }; throw error; }
-    return data;
-  },
-  async saveIntro(me, intro){
-    if (DEMO) { LS.set("safra_demo_intro", intro); return; }
-    const { error } = await sb.from("apresentacoes").upsert({ user_id:me.id, historia:intro.historia, objetivo:intro.objetivo, updated_at:new Date().toISOString() }, { onConflict:"user_id" });
-    if (error) throw error;
-  },
-  async grupo(){
-    if (DEMO) return C.WHATSAPP || "";
-    const { data, error } = await sb.rpc("grupo_link");
-    if (error) { console.error(error); return ""; }
-    return data || "";
-  },
   async pact(me){
     if (DEMO) return LS.get("safra_demo_pact", {});
     const { data, error } = await sb.from("pacts").select("habit,activity,goal").eq("user_id", me.id);
@@ -501,11 +476,6 @@ const tcolor = pts => EMB[titleIdx(pts)].c;
 const nm = n => String(n||"").replace(/(^|\s)(\p{Ll})/gu, (m,a,b)=>a+b.toUpperCase());
 const avatarE = (n, pts, s=18) => `<span class="avw">${avatar(n)}<span class="avb">${emblem(titleIdx(pts), s)}</span></span>`;
 const streakTxt = n => n>0 ? `🔥 ${seguidos(n)}` : "sem sequência ainda";
-function copyText(t){
-  try { if (navigator.clipboard && window.isSecureContext) { navigator.clipboard.writeText(t).catch(()=>fallbackCopy(t)); return; } } catch {}
-  fallbackCopy(t);
-}
-function fallbackCopy(t){ const a=document.createElement("textarea"); a.value=t; a.style.position="fixed"; a.style.opacity="0"; document.body.appendChild(a); a.select(); try{document.execCommand("copy")}catch{} a.remove(); }
 function showLevelUp(i){
   document.querySelector(".lvup")?.remove();
   const t = TITLES[i], m = document.createElement("div"); m.className="lvup";
@@ -514,7 +484,7 @@ function showLevelUp(i){
 }
 
 /* ---------- estado ---------- */
-const S = { me:null, checks:new Set(), rank:[], calls:[], pact:{}, intro:null, introNeeded:false, showApresenta:false, grupo:"", editDay:TODAY };
+const S = { me:null, checks:new Set(), rank:[], calls:[], pact:{}, editDay:TODAY };
 const pactDone = () => HABITS.every(h => S.pact[h.k]?.activity);
 const toast = m => { const t=$("#toast"); t.textContent=m; t.classList.add("on"); clearTimeout(t._h); t._h=setTimeout(()=>t.classList.remove("on"),2200); };
 
@@ -538,7 +508,7 @@ function shell(inner){
     <nav class="nav">${NAV.slice(0,3).map(n=>`<a href="#/${n.r}" class="${r===n.r?"on":""}">${n.i}${n.t}</a>`).join("")}<a href="#/pacto" class="${r==="pacto"?"on":""}"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21c-4-3-7-6.5-7-10.5A7 7 0 0 1 12 4a7 7 0 0 1 7 6.5C19 14.5 16 18 12 21z"/><path d="M12 8v6M9 11h6"/></svg>Meu Pacto</a></nav>
     <div class="nav-g mono">Comunidade</div>
     <nav class="nav">${NAV.slice(3).map(n=>`<a href="#/${n.r}" class="${r===n.r?"on":""}">${n.i}${n.t}</a>`).join("")}
-      ${S.grupo?`<a href="${esc(S.grupo)}" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20l1.3-3.8A8 8 0 1 1 8 19z"/></svg>Grupo da turma</a>`:""}</nav>
+      <a href="${esc(C.WHATSAPP)}" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20l1.3-3.8A8 8 0 1 1 8 19z"/></svg>Grupo da turma</a></nav>
     <div class="me">${avatarE(S.me.name, sc.total, 16)}<div style="min-width:0"><div class="nm">${esc(S.me.name)}</div><div class="lv" style="color:${tcolor(sc.total)}">${lv}</div></div><button title="Sair" data-act="logout">${I.out}</button></div>
   </aside>
   <main>
@@ -586,11 +556,11 @@ function pageInicio(){
   <div class="bar" style="max-width:420px"><i style="width:${(curDay/DAYS.length*100).toFixed(1)}%"></i></div>
   ${titleCard(sc.total)}
 
-  ${S.grupo?`<div class="card grupo">
+  <a class="card grupo" href="${esc(C.WHATSAPP)}" target="_blank" rel="noopener">
     <span class="gi"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20l1.3-3.8A8 8 0 1 1 8 19z"/></svg></span>
-    <span class="gt"><b>Grupo da turma</b><small>${S.intro?"Ainda não se apresentou lá? Copie sua apresentação e cole no grupo.":"É lá que a turma conversa e avisa das calls ao vivo."}</small></span>
-    <span class="acts">${S.intro?`<button class="btn ghost" data-act="copy-intro">Copiar apresentação</button>`:""}<a class="btn" href="${esc(S.grupo)}" target="_blank" rel="noopener">Entrar no grupo</a></span>
-  </div>`:""}
+    <span class="gt"><b>Entre no grupo da turma</b><small>Ao entrar, se apresenta pra turma: sua história no digital até aqui e seu objetivo em 2027 com o digital 🌱</small></span>
+    <span class="btn">Entrar no grupo</span>
+  </a>
 
   <section class="sec">
     <div class="sec-h"><div><h2>${I.flame}Fechamento de hoje</h2><p class="sub">${nToday}/5 do seu pacto cumpridos hoje · toque para marcar</p></div><a class="link" href="#/pacto">Editar meu pacto ›</a></div>
@@ -674,36 +644,6 @@ function pactHead(first){
     <h1 style="margin-top:10px">${first?`Seu <span class="serif">Pacto</span> da Safra`:"Seus 5 hábitos"}</h1>
     <p>Escolha <b style="color:var(--fg)">uma atividade-chave por área</b> que você vai fazer <b style="color:var(--fg)">todo dia até 31/12</b> para terminar 2026 com um resultado totalmente diferente. É o seu desafio, do seu jeito.</p></div>`;
 }
-const introText = () => `Oi, turma! Sou ${nm(S.me?.name||"")}. 🌱\nMinha história no digital: ${S.intro?.historia||""}\nMeu objetivo até 31/12: ${S.intro?.objetivo||""}`;
-function pageIntroFull(){
-  const i = S.intro || {};
-  return `<div class="pacto-full"><div class="pacto">
-    <div class="head">${logo(52)}<div class="mono">Boas-vindas, ${esc(nm(first(S.me?.name)))}</div>
-      <h1 style="margin-top:10px">Antes do grupo, <span class="serif">se apresenta</span></h1>
-      <p>Duas perguntas rápidas. Suas respostas viram a sua apresentação para a turma no grupo do WhatsApp.</p></div>
-    <form id="introForm">
-      <div class="card pk" style="grid-template-columns:1fr"><div>
-        <label for="in_h" style="margin-top:0;font-size:14px;color:var(--fg);font-weight:600">Qual a sua história no digital até aqui?</label>
-        <textarea class="inp" id="in_h" name="historia" required minlength="20" maxlength="1500" placeholder="Ex.: Comecei editando vídeo em 2022, hoje faço motion para 3 clientes fixos...">${esc(i.historia||"")}</textarea>
-        <div class="cc">mínimo 20 caracteres</div></div></div>
-      <div class="card pk" style="grid-template-columns:1fr"><div>
-        <label for="in_o" style="margin-top:0;font-size:14px;color:var(--fg);font-weight:600">Qual o seu objetivo até 31/12?</label>
-        <textarea class="inp" id="in_o" name="objetivo" required minlength="20" maxlength="600" placeholder="Ex.: Fechar meus primeiros R$ 10 mil no mês com o meu produto">${esc(i.objetivo||"")}</textarea>
-        <div class="cc">mínimo 20 caracteres</div></div></div>
-      <button class="btn" type="submit">Continuar</button>
-    </form></div></div>`;
-}
-function pageApresentaFull(){
-  return `<div class="pacto-full"><div class="pacto">
-    <div class="head">${logo(52)}<div class="mono">Último passo</div>
-      <h1 style="margin-top:10px">Agora se apresenta <span class="serif">pra turma</span></h1>
-      <p>Sua apresentação já está pronta. Cola essa mensagem no grupo assim que entrar.</p></div>
-    <div class="preview">${esc(introText())}</div>
-    ${S.grupo ? `<button class="btn big" data-act="copy-join">Copiar e entrar no grupo</button>`
-              : `<p class="msg err" style="margin-top:16px">Não consegui carregar o link do grupo. Recarregue a página.</p>`}
-    <a href="#" class="skip" data-act="intro-done">Já entrei no grupo, seguir para a Área</a>
-  </div></div>`;
-}
 function pagePactoFull(){ return `<div class="pacto-full"><div class="pacto">${pactHead(true)}${pactForm(true)}</div></div>`; }
 function pagePacto(){ return shell(`<div class="pacto" style="margin:0">${pactHead(false)}${pactForm(false)}</div>`); }
 function pageCalls(){
@@ -737,8 +677,8 @@ function pageBeneficios(){
   <section class="sec ben">
     <div class="card"><span class="pill g tag">Bônus</span><h3>Skill de Motion</h3><p>A skill para criar motions com IA. Baixe e siga o passo a passo de instalação.</p>
       <a class="btn" ${C.SKILL_URL?`href="${esc(C.SKILL_URL)}" target="_blank" rel="noopener"`:`aria-disabled="true"`}>${C.SKILL_URL?"Baixar a skill":"Liberada em breve"}</a></div>
-    <div class="card"><span class="pill tag">Comunidade</span><h3>Grupo da turma</h3><p>Onde a turma conversa, troca network e avisa das calls ao vivo.</p>
-      ${S.grupo?`<a class="btn ghost" href="${esc(S.grupo)}" target="_blank" rel="noopener">Entrar no grupo</a>`:""}</div>
+    <div class="card"><span class="pill tag">Comunidade</span><h3>Grupo da turma</h3><p>Onde a turma conversa, troca network e avisa das calls ao vivo.</p><p style="color:var(--g);font-size:13.5px">Ao entrar, se apresenta pra turma: sua história no digital até aqui e seu objetivo em 2027 com o digital 🌱</p>
+      <a class="btn ghost" href="${esc(C.WHATSAPP)}" target="_blank" rel="noopener">Entrar no grupo</a></div>
     <div class="card"><span class="pill tag">Toda semana</span><h3>Call da Safra ao vivo</h3><p>5 calls ao vivo durante os 45 dias, com gravação aqui na área.</p>
       <a class="btn ghost" href="#/calls">Ver as calls</a></div>
   </section>`);
@@ -765,8 +705,6 @@ const PAGES = { pacto:pagePacto, inicio:pageInicio, fechamento:pageFechamento, c
 function sortRank(){ S.rank.sort((a,b)=>b.total-a.total||b.streak-a.streak||a.name.localeCompare(b.name)); }
 function render(){
   if (!S.me) return;
-  if (S.introNeeded) { $("#root").innerHTML = pageIntroFull(); window.scrollTo({top:0}); return; }
-  if (S.showApresenta) { $("#root").innerHTML = pageApresentaFull(); window.scrollTo({top:0}); return; }
   if (!pactDone()) { $("#root").innerHTML = pagePactoFull(); window.scrollTo({top:0}); return; }
   const p = PAGES[route()] || pageInicio;
   $("#root").innerHTML = p();
@@ -796,14 +734,6 @@ document.addEventListener("click", async e => {
   const cl = e.target.closest("[data-call]");
   if (cl) { openVideo(cl.dataset.call, cl.dataset.title); return; }
   const act = e.target.closest("[data-act]");
-  if (act && ["copy-join","copy-intro","intro-done"].includes(act.dataset.act)) {
-    e.preventDefault();
-    if (act.dataset.act !== "intro-done") copyText(introText());
-    if (act.dataset.act === "copy-join") { window.open(S.grupo, "_blank", "noopener"); toast("Apresentação copiada. Cola no grupo 🌱"); }
-    else if (act.dataset.act === "copy-intro") toast("Apresentação copiada 🌱");
-    if (act.dataset.act !== "copy-intro") { S.showApresenta = false; render(); }
-    return;
-  }
   if (act?.dataset.act === "logout") { await DB.logout(); location.hash=""; location.reload(); }
   if (e.target.closest("[data-close-lv]") || e.target.classList.contains("lvup")) document.querySelector(".lvup")?.remove();
   if (e.target.closest("[data-close]") || e.target.classList.contains("modal")) document.querySelector(".modal")?.remove();
@@ -830,14 +760,6 @@ document.addEventListener("submit", async e => {
         : "Não deu para enviar. Confira o e-mail e tente de novo.";
       b.disabled=false; console.error(err); }
   }
-  if (e.target.id === "introForm") {
-    const f = new FormData(e.target), intro = { historia:String(f.get("historia")||"").trim(), objetivo:String(f.get("objetivo")||"").trim() };
-    if (intro.historia.length < 20 || intro.objetivo.length < 20) { toast("Escreva pelo menos 20 caracteres em cada resposta."); return; }
-    const b = e.target.querySelector("button[type=submit]"); b.disabled = true;
-    try { await DB.saveIntro(S.me, intro); S.intro = intro; S.grupo = await DB.grupo(); }
-    catch(err){ b.disabled = false; toast("Não salvou. Tenta de novo."); console.error(err); return; }
-    S.introNeeded = false; S.showApresenta = true; render(); return;
-  }
   if (e.target.id === "pactForm") {
     const f = new FormData(e.target), wasDone = pactDone(), pact = {};
     for (const h of HABITS) pact[h.k] = { activity:String(f.get("a_"+h.k)||"").trim(), goal:String(f.get("g_"+h.k)||"").trim() };
@@ -858,10 +780,7 @@ document.addEventListener("submit", async e => {
 });
 
 async function load(){
-  let intro;
-  [S.checks, S.calls, S.pact, intro] = await Promise.all([DB.myChecks(S.me), DB.calls(), DB.pact(S.me), DB.intro(S.me)]);
-  if (intro?.unsupported) { S.intro = null; S.introNeeded = false; S.grupo = C.WHATSAPP || ""; } // banco ainda sem a apresentação: segue como antes
-  else { S.intro = intro; S.introNeeded = !intro; S.grupo = intro ? await DB.grupo() : ""; }
+  [S.checks, S.calls, S.pact] = await Promise.all([DB.myChecks(S.me), DB.calls(), DB.pact(S.me)]);
   S.rank = await DB.ranking(S.me, S.checks); sortRank();
 }
 
