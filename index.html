@@ -453,6 +453,15 @@ svg.mark rect{transform-box:fill-box;transform-origin:center;animation:px .5s cu
 .offer a.cta[data-checkout]:focus-visible,.last-call a.cta[data-checkout]:focus-visible{outline:2px solid #22E07A}
 .offer a.cta[data-checkout]::after,.last-call a.cta[data-checkout]::after{background:linear-gradient(110deg,transparent 35%,rgba(255,255,255,.45) 50%,transparent 65%)!important}
 .split.solo{grid-template-columns:minmax(0,440px);justify-content:center}
+.top-cta{display:flex;flex-direction:column;align-items:center;gap:10px;margin:22px auto 6px;width:100%;max-width:420px}
+.top-cta .cta{width:100%;background:linear-gradient(180deg,#3BF08E,#16C566);color:#04140A;box-shadow:0 0 0 6px rgba(34,224,122,.10),0 0 28px rgba(34,224,122,.35)}
+.top-cta .cta:hover{background:linear-gradient(180deg,#5CF5A3,#1BD472)}
+.top-cta .cta::after{background:linear-gradient(110deg,transparent 35%,rgba(255,255,255,.45) 50%,transparent 65%)!important}
+.top-cta small{font:500 11px var(--f-mono);letter-spacing:.1em;text-transform:uppercase;color:#9A9A95}
+.sticky-cta{position:fixed;left:0;right:0;bottom:0;z-index:50;padding:10px 16px calc(10px + env(safe-area-inset-bottom));background:rgba(8,9,10,.92);backdrop-filter:blur(10px);border-top:1px solid rgba(255,255,255,.08);transform:translateY(110%);transition:transform .25s ease}
+.sticky-cta.on{transform:none}
+.sticky-cta a{display:flex;justify-content:center;align-items:center;gap:8px;text-decoration:none;font-weight:700;font-size:16px;padding:15px;border-radius:999px;background:linear-gradient(180deg,#3BF08E,#16C566);color:#04140A}
+@media (min-width:769px){.sticky-cta{display:none}}
 </style>
 
 <!-- TOPO -->
@@ -474,6 +483,10 @@ svg.mark rect{transform-box:fill-box;transform-origin:center;animation:px .5s cu
     </div>
     <h1><span class="serif">Nova Safra</span><span class="sans">Comece 2027 diferente</span></h1>
     <p class="promise"><b>Sozinho você já tentou.</b> Agora entra numa turma que vai fechar 2026 <b>crescendo junto</b>: network, call ao vivo e <b>gente do seu lado todo dia</b>.</p>
+    <div class="top-cta">
+      <a class="cta" href="https://pay.cakto.com.br/3bteztx_1334333" target="_blank" rel="noopener" data-checkout>Quero ser semeador · R$27 <span class="arr">→</span></a>
+      <small>taxa única · 7 dias de garantia</small>
+    </div>
     <div class="stats">
       <div class="stat"><b id="cDays">45</b><span>dias para 2027</span></div>
       <div class="stat"><b>1</b><span>turma, todo dia</span></div>
@@ -799,5 +812,11 @@ svg.mark rect{transform-box:fill-box;transform-origin:center;animation:px .5s cu
   function start(){setTimeout(()=>{load();v.play().catch(()=>{});},200);}
   if(document.readyState==="complete")start();else addEventListener("load",start,{once:true});
 })();
+</script>
+<div class="sticky-cta" id="stickyCta" aria-hidden="true"><a href="https://pay.cakto.com.br/3bteztx_1334333" target="_blank" rel="noopener" data-checkout tabindex="-1">Quero ser semeador · R$27 <span class="arr">→</span></a></div>
+<script>
+(function(){var bar=document.getElementById("stickyCta"),top=document.querySelector(".top-cta"),offers=[].slice.call(document.querySelectorAll("#oferta .cta,.last-call .cta"));if(!bar||!top||!("IntersectionObserver" in window))return;
+var vis=new Set();function upd(){var on=!vis.size&&top.getBoundingClientRect().bottom<0;bar.classList.toggle("on",on);bar.setAttribute("aria-hidden",on?"false":"true");bar.firstChild.tabIndex=on?0:-1;}
+var io=new IntersectionObserver(function(es){es.forEach(function(e){e.isIntersecting?vis.add(e.target):vis.delete(e.target)});upd();});[top].concat(offers).forEach(function(el){io.observe(el)});addEventListener("scroll",upd,{passive:true});})();
 </script>
 </html>
